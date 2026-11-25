@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Noto Serif Bengali", "Hind Siliguri", Georgia, serif;
+  --font-sans: "Hind Siliguri", "Noto Sans Bengali", ui-sans-serif, system-ui, sans-serif;
+  --color-ivory: #fdf9ef;
+  --color-cream: #f7edd6;
+  --color-cream-deep: #f1e2c2;
+  --color-butter: #f2d98c;
+  --color-gold: #b98a2f;
+  --color-gold-deep: #8c6a1f;
+  --color-gold-soft: #d9b45b;
+  --color-cocoa: #3a2a18;
+  --color-cocoa-soft: #5c4632;
+  --color-cocoa-faint: #8a7360;
+  --color-olive: #6f6b3f;
+  --color-line: #e5d5b3;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #fdf9ef;
+  color: #3a2a18;
+  font-family: var(--font-sans);
+  overflow-x: clip;
+}
+
+::selection {
+  background-color: #f2d98c;
+  color: #3a2a18;
+}
+
+/* Bengali headlines: no artificial letter-spacing, generous line-height */
+h1, h2, h3 {
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+/* Thin gold marquee strip */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 30s linear infinite;
+  will-change: transform;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Gentle float for the hero jar */
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-float {
+  animation: floaty 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Hero entrance */
+@keyframes heroIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-in {
+  animation: heroIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.hero-in-delay {
+  animation: heroIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Soft gold glow behind the hero jar */
+.gold-halo {
+  background: radial-gradient(
+    ellipse 62% 55% at 50% 42%,
+    rgb(242 217 140 / 0.55),
+    rgb(242 217 140 / 0.12) 62%,
+    transparent 78%
+  );
+}
+
+/* Warm paper texture for the showcase band */
+.band-warm {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgb(185 138 47 / 0.10), transparent 70%),
+    linear-gradient(180deg, #f7edd6 0%, #f3e5c6 100%);
+}
+
+.lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.lift:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 14px 32px -14px rgb(140 106 31 / 0.35),
+    0 4px 12px -4px rgb(58 42 24 / 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .marquee-track, .animate-float, .hero-in, .hero-in-delay { animation: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
