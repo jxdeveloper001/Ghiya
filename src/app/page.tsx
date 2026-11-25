@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { benefits, faqs, hero, intro, order, packs, showcase, site, why } from "@/data/site";
+import { benefits, faqs, hero, intro, order, packs, reviews, showcase, site, why } from "@/data/site";
 
 const fade = "transition-all duration-300 ease-out";
 
@@ -50,6 +50,68 @@ export default function Home() {
   const [orderId, setOrderId] = useState("");
   const faqRefs = useRef<Array<HTMLDivElement | null>>([]);
   const [faqHeights, setFaqHeights] = useState<number[]>([]);
+
+  // ── Reviews slider: auto-advances right-to-left (track moves left),
+  //    infinitely — the list is rendered twice and the position snaps
+  //    back to 0 without animation after the duplicated first card.
+  //    Prev/next buttons move one card at a time.
+  const reviewCount = reviews.items.length;
+  const [revPos, setRevPos] = useState(0);
+  const [revSnap, setRevSnap] = useState(false);
+  const [revPaused, setRevPaused] = useState(false);
+  const [revStep, setRevStep] = useState(0);
+  const revTrackRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const measure = () => {
+      const track = revTrackRef.current;
+      if (track && track.children.length > 1) {
+        const first = track.children[0] as HTMLElement;
+        const second = track.children[1] as HTMLElement;
+        setRevStep(second.offsetLeft - first.offsetLeft);
+      }
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  useEffect(() => {
+    if (revPos >= reviewCount) {
+      const t = setTimeout(() => {
+        setRevSnap(true);
+        setRevPos(0);
+      }, 700);
+      return () => clearTimeout(t);
+    }
+  }, [revPos, reviewCount]);
+
+  useEffect(() => {
+    if (revPaused) return;
+    const t = setInterval(() => {
+      setRevSnap(false);
+      setRevPos((p) => p + 1);
+    }, 3000);
+    return () => clearInterval(t);
+  }, [revPaused]);
+
+  const revNext = () => {
+    setRevSnap(false);
+    setRevPos((p) => p + 1);
+  };
+  const revPrev = () => {
+    if (revPos === 0) {
+      setRevSnap(true);
+      setRevPos(reviewCount);
+      setTimeout(() => {
+        setRevSnap(false);
+        setRevPos(reviewCount - 1);
+      }, 40);
+    } else {
+      setRevSnap(false);
+      setRevPos((p) => p - 1);
+    }
+  };
 
   // Measure each FAQ answer once so open/close animates smoothly
   // (max-height) instead of vanishing in one frame.
@@ -480,6 +542,84 @@ export default function Home() {
               >
                 {u}
               </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── রিভিউ — auto right-to-left infinite slider + prev/next buttons ── */}
+      <section id="reviews" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-20 md:px-8">
+        <div className="reveal flex flex-wrap items-end justify-between gap-5">
+          <div className="text-center md:text-left">
+            <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
+              {reviews.eyebrow}
+            </p>
+            <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
+              {reviews.heading}
+            </h2>
+            <p className="mx-auto mt-3 max-w-md text-[15.5px] leading-relaxed text-cocoa-faint md:mx-0">
+              {reviews.subtext}
+            </p>
+          </div>
+          <div className="mx-auto flex gap-3 md:mx-0">
+            <button
+              type="button"
+              onClick={revPrev}
+              aria-label="আগের রিভিউ"
+              className={`${fade} flex h-12 w-12 items-center justify-center rounded-full border border-line bg-ivory text-gold-deep shadow-[0_10px_20px_-10px_rgb(124_42_32/0.5)] hover:-translate-y-0.5 hover:border-gold hover:bg-gold hover:text-white active:scale-95`}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M15 5l-7 7 7 7" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={revNext}
+              aria-label="পরের রিভিউ"
+              className={`${fade} flex h-12 w-12 items-center justify-center rounded-full border border-line bg-ivory text-gold-deep shadow-[0_10px_20px_-10px_rgb(124_42_32/0.5)] hover:-translate-y-0.5 hover:border-gold hover:bg-gold hover:text-white active:scale-95`}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div
+          className="reveal mt-8 overflow-hidden md:mt-10"
+          onMouseEnter={() => setRevPaused(true)}
+          onMouseLeave={() => setRevPaused(false)}
+        >
+          <div
+            ref={revTrackRef}
+            className={`flex gap-4 ${revSnap ? "" : "transition-transform duration-700 ease-in-out"}`}
+            style={{ transform: `translateX(-${revPos * revStep}px)` }}
+          >
+            {[...reviews.items, ...reviews.items].map((r, i) => (
+              <figure
+                key={i}
+                className="w-[85%] shrink-0 rounded-[20px] border border-line bg-ivory p-6 shadow-[0_18px_36px_-20px_rgb(124_42_32/0.45)] sm:w-[47%] lg:w-[31.5%]"
+              >
+                <div className="flex gap-0.5 text-[17px] text-gold" aria-label={`${r.stars} / ৫`}>
+                  {[0, 1, 2, 3, 4].map((s) => (
+                    <span key={s} className={s < r.stars ? "" : "text-line"}>
+                      ★
+                    </span>
+                  ))}
+                </div>
+                <blockquote className="mt-3 text-[15.5px] leading-relaxed text-cocoa">
+                  “{r.text}”
+                </blockquote>
+                <figcaption className="mt-4 flex items-center gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold/15 font-display text-[16px] font-bold text-gold-deep">
+                    {r.name[0]}
+                  </span>
+                  <span>
+                    <span className="block text-[15px] font-bold text-cocoa">{r.name}</span>
+                    <span className="block text-[13px] text-cocoa-faint">{r.role}</span>
+                  </span>
+                </figcaption>
+              </figure>
             ))}
           </div>
         </div>
