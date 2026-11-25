@@ -30,6 +30,23 @@ body {
   overflow-x: clip;
 }
 
+/* Section background textures (user-supplied): cream texture for
+   cream sections, yellow texture for yellow sections. The solid
+   colour underneath stays as the fallback while the image loads. */
+.bg-cream-img {
+  background-image: url("/bg-cream.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.bg-yellow-img {
+  background-image: url("/bg-yellow.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 ::selection {
   background-color: #f0e2bb;
   color: #3a2405;

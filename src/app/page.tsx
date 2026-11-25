@@ -71,7 +71,8 @@ function VideoSection() {
   };
 
   return (
-    <section id="video" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-[60px] md:px-8">
+    <section id="video" className="scroll-mt-24 bg-cream-img py-[60px]">
+      <div className="mx-auto max-w-3xl px-5 md:px-8">
       <div className="reveal text-center">
         <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
           {videoSection.eyebrow}
@@ -126,6 +127,7 @@ function VideoSection() {
             </span>
           </button>
         )}
+      </div>
       </div>
     </section>
   );
@@ -316,7 +318,7 @@ export default function Home() {
            background, minimal text on the yellow, jar in the middle ── */}
       <section className="relative overflow-hidden">
         <Image
-          src="/hero-bg-gold.jpg"
+          src="/bg-yellow.jpg"
           alt=""
           aria-hidden="true"
           fill
@@ -434,7 +436,7 @@ export default function Home() {
       </section>
 
       {/* ── পরিচিতি — dark yellow band ── */}
-      <section id="intro" className="relative overflow-hidden bg-gold">
+      <section id="intro" className="relative overflow-hidden bg-gold bg-yellow-img">
         <div className="relative mx-auto grid max-w-6xl gap-8 px-5 py-[60px] md:grid-cols-[1.1fr_0.9fr] md:px-8">
           <div className="reveal">
             <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-ivory/90">
@@ -685,7 +687,8 @@ export default function Home() {
       <VideoSection />
 
       {/* ── জিজ্ঞাসা ── */}
-      <section id="faq" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-[60px] md:px-8">
+      <section id="faq" className="scroll-mt-24 bg-cream-img py-[60px]">
+        <div className="mx-auto max-w-3xl px-5 md:px-8">
         <div className="reveal text-center">
           <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
             জিজ্ঞাসা
@@ -735,10 +738,11 @@ export default function Home() {
             );
           })}
         </div>
+        </div>
       </section>
 
       {/* ── Order — with the product being bought ── */}
-      <section id="order" className="relative scroll-mt-24 overflow-hidden bg-gold">
+      <section id="order" className="relative scroll-mt-24 overflow-hidden bg-gold bg-yellow-img">
         <div className="relative mx-auto max-w-2xl px-5 py-[60px] md:px-8">
           <div className="reveal text-center">
             <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-ivory/90">
