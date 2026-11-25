@@ -378,18 +378,18 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="reveal relative mx-auto mt-10 max-w-5xl md:mt-12 md:h-[560px]">
-          {/* Dotted connectors (desktop only) */}
+        <div className="reveal relative mx-auto mt-10 max-w-5xl md:mt-12 md:h-[640px]">
+          {/* Dotted connectors (desktop only) — top / left / right / bottom */}
           <svg
             aria-hidden="true"
-            viewBox="0 0 1000 560"
+            viewBox="0 0 1000 640"
             className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
           >
             <g stroke="#8a5e00" strokeWidth="2" fill="none" strokeDasharray="2 7" strokeLinecap="round" opacity="0.55">
-              <path d="M 250 110 C 320 130, 360 160, 395 200" />
-              <path d="M 250 450 C 320 430, 360 400, 395 360" />
-              <path d="M 750 110 C 680 130, 640 160, 605 200" />
-              <path d="M 750 450 C 680 430, 640 400, 605 360" />
+              <path d="M 500 152 C 500 170, 500 185, 500 203" />
+              <path d="M 285 320 C 315 312, 350 312, 386 320" />
+              <path d="M 715 320 C 685 312, 650 312, 614 320" />
+              <path d="M 500 488 C 500 470, 500 455, 500 437" />
             </g>
           </svg>
 
@@ -409,12 +409,12 @@ export default function Home() {
             {benefits.items.map((b, i) => (
               <div
                 key={b.title}
-                className={`paint-blob group bg-white px-6 py-6 text-center shadow-[0_18px_36px_-18px_rgb(138_94_0/0.5)] ${fade} hover:-translate-y-1 md:absolute md:w-[290px] md:px-6 md:py-5 ${
+                className={`paint-blob group bg-white px-6 py-6 text-center shadow-[0_18px_36px_-18px_rgb(138_94_0/0.5)] ${fade} md:absolute md:w-[290px] md:px-6 md:py-5 ${
                   [
-                    "md:left-0 md:top-[2%] md:-rotate-2",
-                    "md:left-0 md:top-[60%] md:rotate-1",
-                    "md:right-0 md:top-[2%] md:rotate-2",
-                    "md:right-0 md:top-[60%] md:-rotate-1",
+                    "md:left-1/2 md:top-0 md:-translate-x-1/2 md:-rotate-1",
+                    "md:left-0 md:top-1/2 md:-translate-y-1/2 md:rotate-1",
+                    "md:right-0 md:top-1/2 md:-translate-y-1/2 md:-rotate-1",
+                    "md:bottom-0 md:left-1/2 md:-translate-x-1/2 md:rotate-1",
                   ][i] ?? ""
                 }`}
               >
