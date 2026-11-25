@@ -1,73 +1,42 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { benefits, faqs, hero, intro, order, packs, showcase, site, why } from "@/data/site";
 
-const NAV = [
-  { href: "#gunagun", label: "গুণাগুণ" },
-  { href: "#porichiti", label: "পরিচিতি" },
-  { href: "#keno", label: "কেন Gheeya" },
-  { href: "#jiggasha", label: "জিজ্ঞাসা" },
-];
+const fade = "transition-all duration-300 ease-out";
 
-const MARQUEE = [
-  "খাঁটি",
-  "প্রাকৃতিক",
-  "ধীরে জ্বাল দেওয়া",
-  "কেমিক্যালমুক্ত",
-  "এ২ গরুর দুধ",
-  "সোনালি ঘি",
-];
-
-function BenefitIcon({ name }: { name: string }) {
-  const common = {
-    width: 22,
-    height: 22,
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.8,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-  };
-  switch (name) {
-    case "leaf":
-      return (
-        <svg {...common}>
-          <path d="M5 19C5 9.5 11.5 4 20 4c0 8.5-5.5 15-15 15z" />
-          <path d="M5 19c3-5 7-8.5 11-10.5" />
-        </svg>
-      );
-    case "shield":
-      return (
-        <svg {...common}>
-          <path d="M12 3l7 2.8v5.4c0 4.8-3.4 7.8-7 9.3-3.6-1.5-7-4.5-7-9.3V5.8L12 3z" />
-          <path d="M9 11.8l2.2 2.2L15.5 9.5" />
-        </svg>
-      );
-    case "drop":
-      return (
-        <svg {...common}>
-          <path d="M12 3.5c3 4 5.8 6.8 5.8 10a5.8 5.8 0 1 1-11.6 0c0-3.2 2.8-6 5.8-10z" />
-        </svg>
-      );
-    case "clock":
-      return (
-        <svg {...common}>
-          <circle cx="12" cy="12" r="8.5" />
-          <path d="M12 7.5V12l3 2" />
-        </svg>
-      );
-    default:
-      return (
-        <svg {...common}>
-          <circle cx="12" cy="12" r="3.6" />
-          <path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.8 1.8M16.7 16.7l1.8 1.8M18.5 5.5l-1.8 1.8M7.3 16.7l-1.8 1.8" />
-        </svg>
-      );
-  }
-}
+const iconMap: Record<string, React.ReactNode> = {
+  leaf: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14z" />
+      <path d="M5 19c3-5 7-9 11-11" />
+    </svg>
+  ),
+  shield: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z" />
+      <path d="M9 12l2 2 4-4" />
+    </svg>
+  ),
+  drop: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z" />
+    </svg>
+  ),
+  clock: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 7v5l3.5 2" />
+    </svg>
+  ),
+  sun: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="4.5" />
+      <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.5 4.5l2 2M17.5 17.5l2 2M19.5 4.5l-2 2M6.5 17.5l-2 2" />
+    </svg>
+  ),
+};
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -77,125 +46,136 @@ export default function Home() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [error, setError] = useState("");
+  const [done, setDone] = useState(false);
   const [orderId, setOrderId] = useState("");
 
+  const selected = packs.items.find((p) => p.size === pack) ?? packs.items[1];
+
   useEffect(() => {
-    const els = document.querySelectorAll(".reveal");
+    const els = Array.from(document.querySelectorAll(".reveal"));
     const io = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
+      (entries) => {
+        for (const e of entries) {
           if (e.isIntersecting) {
             e.target.classList.add("is-visible");
             io.unobserve(e.target);
           }
-        }),
-      { threshold: 0.12 }
+        }
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, []);
 
-  function submitOrder(e: React.FormEvent) {
+  function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!name.trim() || phone.replace(/\D/g, "").length < 10) {
-      setError("অনুগ্রহ করে আপনার নাম ও সঠিক মোবাইল নম্বর দিন।");
-      return;
-    }
-    setError("");
+    if (!name.trim() || !phone.trim() || !address.trim()) return;
     setOrderId(`GHEEYA-${Math.floor(1000 + Math.random() * 9000)}`);
+    setDone(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   return (
-    <div>
+    <main className="min-h-screen">
       {/* ── Header ── */}
-      <header className="sticky top-0 z-50 border-b border-line/70 bg-ivory/90 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-line/70 bg-ivory/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5 md:px-8">
-          <a href="#top" className="flex items-baseline gap-2">
-            <span className="font-display text-[26px] font-bold leading-none text-cocoa">
+          <a href="#" className="flex items-baseline gap-1.5">
+            <span className="font-display text-[26px] font-bold tracking-tight text-cocoa">
               Gheeya
             </span>
-            <span className="text-sm font-medium text-gold-deep">ঘি</span>
+            <span className="font-display text-[15px] text-gold-deep">ঘি</span>
           </a>
-          <nav className="hidden items-center gap-7 md:flex">
-            {NAV.map((n) => (
-              <a
-                key={n.href}
-                href={n.href}
-                className="text-[15px] font-medium text-cocoa-soft transition-colors hover:text-gold-deep"
-              >
-                {n.label}
-              </a>
-            ))}
+          <nav className="hidden items-center gap-8 text-[15px] font-medium text-cocoa-soft md:flex">
+            <a href="#benefits" className={`${fade} hover:text-gold`}>গুণাগুণ</a>
+            <a href="#intro" className={`${fade} hover:text-gold`}>পরিচিতি</a>
+            <a href="#why" className={`${fade} hover:text-gold`}>কেন Gheeya</a>
+            <a href="#faq" className={`${fade} hover:text-gold`}>জিজ্ঞাসা</a>
           </nav>
-          <div className="flex items-center gap-3">
-            <a
-              href="#order"
-              className="rounded-full bg-cocoa px-5 py-2.5 text-[15px] font-semibold text-ivory transition-colors hover:bg-gold-deep"
-            >
-              অর্ডার করুন
-            </a>
-            <button
-              type="button"
-              aria-label="মেনু খুলুন"
-              onClick={() => setMenuOpen((v) => !v)}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-cocoa md:hidden"
-            >
-              {menuOpen ? "✕" : "☰"}
-            </button>
+          <a
+            href="#order"
+            className={`${fade} rounded-full bg-cocoa px-5 py-2.5 text-[15px] font-semibold text-ivory hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_10px_20px_-8px_rgb(154_52_18/0.6)] active:scale-95`}
+          >
+            অর্ডার করুন
+          </a>
+          <button
+            type="button"
+            aria-label="মেনু"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((v) => !v)}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-line bg-ivory text-cocoa md:hidden"
+          >
+            <span className="text-[18px] leading-none">{menuOpen ? "✕" : "☰"}</span>
+          </button>
+        </div>
+        <div
+          className={`faq-panel ${menuOpen ? "open" : ""} border-t border-line/60 bg-ivory md:hidden`}
+        >
+          <div>
+            <nav className="flex flex-col px-5 py-2 text-[16px] font-medium text-cocoa-soft">
+              {[
+                ["#benefits", "গুণাগুণ"],
+                ["#intro", "পরিচিতি"],
+                ["#why", "কেন Gheeya"],
+                ["#faq", "জিজ্ঞাসা"],
+              ].map(([href, label]) => (
+                <a
+                  key={href}
+                  href={href}
+                  onClick={() => setMenuOpen(false)}
+                  className="rounded-xl px-2 py-3 transition-colors hover:bg-cream/60 hover:text-gold"
+                >
+                  {label}
+                </a>
+              ))}
+            </nav>
           </div>
         </div>
-        {menuOpen && (
-          <nav className="border-t border-line bg-ivory px-5 py-3 md:hidden">
-            {NAV.map((n) => (
-              <a
-                key={n.href}
-                href={n.href}
-                onClick={() => setMenuOpen(false)}
-                className="block border-b border-line/60 py-3 text-[16px] font-medium text-cocoa-soft last:border-0"
-              >
-                {n.label}
-              </a>
-            ))}
-          </nav>
-        )}
       </header>
 
-      {/* ── Hero ── */}
-      <section id="top" className="relative overflow-hidden">
-        <div className="gold-halo pointer-events-none absolute inset-x-0 top-0 h-[560px]" />
-        <div className="relative mx-auto grid max-w-6xl gap-10 px-5 pb-14 pt-10 md:grid-cols-2 md:items-center md:gap-14 md:px-8 md:pb-20 md:pt-16">
-          <div className="hero-in text-center md:text-left">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
+      {/* ── Hero — short, with AI-made low-res ghee background ── */}
+      <section className="relative overflow-hidden">
+        <Image
+          src="/hero-bg-low.jpg"
+          alt=""
+          aria-hidden="true"
+          fill
+          className="object-cover opacity-60"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-ivory/60 via-ivory/30 to-ivory" />
+        <div className="relative mx-auto grid max-w-6xl items-center gap-8 px-5 pb-12 pt-8 sm:gap-10 md:grid-cols-[1.05fr_0.95fr] md:px-8 md:pb-16 md:pt-12">
+          <div className="hero-in">
+            <p className="text-[15px] font-semibold tracking-wide text-gold-deep">
               {hero.eyebrow}
             </p>
-            <h1 className="mt-4 font-display text-[40px] font-semibold leading-[1.3] text-cocoa sm:text-[52px] md:text-[56px]">
+            <h1 className="mt-2.5 font-display text-[32px] font-semibold text-cocoa sm:text-[42px] md:text-[46px]">
               {hero.titleA}
               <br />
-              <span className="text-gold-deep">{hero.titleB}</span>
+              <span className="text-gold">{hero.titleB}</span>
             </h1>
-            <p className="mx-auto mt-5 max-w-md text-[17px] leading-relaxed text-cocoa-soft md:mx-0">
+            <p className="mt-4 max-w-md text-[16.5px] leading-relaxed text-cocoa-soft">
               {hero.subtext}
             </p>
-            <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row md:justify-start sm:justify-center">
+            <div className="mt-6 flex flex-wrap gap-3">
               <a
                 href="#order"
-                className="w-full rounded-full bg-cocoa px-7 py-3.5 text-center text-[16px] font-semibold text-ivory transition-colors hover:bg-gold-deep sm:w-auto"
+                className={`${fade} rounded-full bg-gold px-7 py-3.5 text-[16px] font-semibold text-white hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_14px_28px_-10px_rgb(154_52_18/0.7)] active:scale-95`}
               >
                 {hero.primaryCta}
               </a>
               <a
-                href="#gunagun"
-                className="w-full rounded-full border border-cocoa/25 px-7 py-3.5 text-center text-[16px] font-semibold text-cocoa transition-colors hover:border-gold-deep hover:text-gold-deep sm:w-auto"
+                href="#intro"
+                className={`${fade} rounded-full border border-cocoa/25 bg-ivory/80 px-7 py-3.5 text-[16px] font-semibold text-cocoa hover:-translate-y-0.5 hover:border-gold hover:text-gold active:scale-95`}
               >
                 {hero.secondaryCta}
               </a>
             </div>
-            <div className="mt-7 flex flex-wrap justify-center gap-2 md:justify-start">
+            <div className="mt-6 flex flex-wrap gap-2">
               {hero.chips.map((c) => (
                 <span
                   key={c}
-                  className="rounded-full border border-line bg-white/60 px-3.5 py-1.5 text-[13.5px] font-medium text-cocoa-soft"
+                  className={`${fade} cursor-default rounded-full border border-line bg-ivory/80 px-3.5 py-1.5 text-[13.5px] font-medium text-cocoa-soft hover:-translate-y-0.5 hover:border-gold hover:text-gold-deep`}
                 >
                   {c}
                 </span>
@@ -203,53 +183,41 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="hero-in-delay relative mx-auto w-full max-w-[420px]">
-            <div className="absolute -inset-3 rounded-t-[999px] rounded-b-[28px] border border-gold/40" />
-            <div className="relative overflow-hidden rounded-t-[999px] rounded-b-[28px] shadow-[0_28px_60px_-20px_rgb(140_106_31/0.45)]">
+          <div className="hero-in-delay relative mx-auto w-full max-w-[300px] sm:max-w-[340px]">
+            <div className="animate-float relative overflow-hidden rounded-t-[170px] rounded-b-[28px] border border-line bg-cream shadow-[0_30px_60px_-24px_rgb(154_52_18/0.45)]">
               <Image
                 src="/ghee-jar-warm.jpg"
-                alt={hero.jarAlt}
+                alt="Gheeya ঘি — কাচের জার"
                 width={736}
                 height={1308}
                 priority
-                className="animate-float aspect-[3/4.2] w-full object-cover object-[50%_28%]"
+                className="aspect-[3/3.6] w-full object-cover object-[50%_28%]"
               />
             </div>
-            <div className="absolute -left-3 top-16 rounded-full bg-ivory px-4 py-2 text-[14px] font-semibold text-cocoa shadow-[0_10px_24px_-8px_rgb(58_42_24/0.35)] sm:-left-6">
+            <div className="absolute -left-3 top-12 rounded-full bg-ivory px-4 py-2 text-[14px] font-semibold text-cocoa shadow-[0_10px_24px_-8px_rgb(67_20_7/0.35)] sm:-left-6">
               ১০০ গ্রাম · ৩০০ গ্রাম
             </div>
-            <div className="absolute -right-2 bottom-14 rounded-full bg-cocoa px-4 py-2 text-[14px] font-semibold text-ivory shadow-[0_10px_24px_-8px_rgb(58_42_24/0.45)] sm:-right-5">
+            <div className="absolute -bottom-3 right-2 rounded-full bg-cocoa px-4 py-2 text-[14px] font-semibold text-ivory shadow-[0_10px_24px_-8px_rgb(67_20_7/0.45)] sm:right-4">
               ধীরে জ্বাল দেওয়া
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Gold marquee strip ── */}
-      <div className="marquee overflow-hidden bg-cocoa py-3.5" aria-hidden="true">
-        <div className="marquee-track flex w-max items-center gap-8 whitespace-nowrap">
-          {[...MARQUEE, ...MARQUEE, ...MARQUEE, ...MARQUEE].map((w, i) => (
-            <span key={i} className="flex items-center gap-8 text-[15px] font-medium text-butter">
-              {w}
-              <span className="text-gold-soft">✦</span>
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* ── গুণাগুণ — jar on a butter circle + short icon rows ── */}
-      <section id="gunagun" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-16 md:px-8 md:py-24">
-        <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
-          <div className="reveal relative mx-auto w-full max-w-[400px]">
-            <div className="absolute -left-8 top-1/2 h-[340px] w-[340px] -translate-y-1/2 rounded-full bg-butter/80 sm:h-[400px] sm:w-[400px]" />
-            <div className="absolute -left-8 top-1/2 h-[340px] w-[340px] -translate-y-1/2 rounded-full border border-gold/30 sm:h-[400px] sm:w-[400px]" />
-            <Image
-              src="/ghee-jar-green.jpg"
-              alt="Gheeya ঘির জার — ৫০০ মিলি, এ২ গির গরুর ঘি"
-              width={433}
-              height={513}
-              className="relative mx-auto w-[78%] rounded-[24px] shadow-[0_24px_48px_-16px_rgb(140_106_31/0.45)]"
-            />
+      {/* ── গুণাগুণ — Chebe-style: jar on a circle + short rows ── */}
+      <section id="benefits" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-14 md:px-8 md:py-20">
+        <div className="grid items-center gap-10 md:grid-cols-[0.9fr_1.1fr] md:gap-14">
+          <div className="reveal relative mx-auto flex w-full max-w-[340px] items-center justify-center">
+            <div className="absolute h-[300px] w-[300px] rounded-full bg-butter/70 sm:h-[360px] sm:w-[360px]" />
+            <div className="relative w-[210px] overflow-hidden rounded-[24px] shadow-[0_24px_48px_-20px_rgb(154_52_18/0.5)] sm:w-[240px]">
+              <Image
+                src="/ghee-jar-green.jpg"
+                alt="Gheeya ঘি — জার"
+                width={433}
+                height={513}
+                className="aspect-[433/513] w-full object-cover"
+              />
+            </div>
           </div>
           <div className="reveal">
             <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
@@ -258,22 +226,22 @@ export default function Home() {
             <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
               {benefits.heading}
             </h2>
-            <p className="mt-3 text-[16px] text-cocoa-soft">{benefits.subtext}</p>
-            <ul className="mt-7">
+            <p className="mt-3 max-w-lg text-[16.5px] leading-relaxed text-cocoa-soft">
+              {benefits.subtext}
+            </p>
+            <ul className="mt-7 space-y-2">
               {benefits.items.map((b) => (
                 <li
-                  key={b.no}
-                  className="flex items-center gap-4 border-b border-line/80 py-4 first:pt-1 last:border-0"
+                  key={b.title}
+                  className={`group flex items-center gap-3.5 rounded-2xl border border-transparent px-3 py-2.5 ${fade} hover:translate-x-1.5 hover:border-line hover:bg-ivory/80`}
                 >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gold/50 bg-white/70 text-gold-deep">
-                    <BenefitIcon name={b.icon} />
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-cream-deep/70 text-gold-deep transition-transform duration-300 group-hover:scale-110 group-hover:bg-butter/60">
+                    {iconMap[b.icon]}
                   </span>
-                  <span>
-                    <span className="block font-display text-[19px] font-semibold leading-snug text-cocoa">
-                      {b.title}
-                    </span>
-                    <span className="block text-[15px] leading-snug text-cocoa-soft">{b.text}</span>
-                  </span>
+                  <div>
+                    <p className="text-[16.5px] font-semibold leading-snug text-cocoa">{b.title}</p>
+                    <p className="text-[14.5px] leading-snug text-cocoa-faint">{b.text}</p>
+                  </div>
                 </li>
               ))}
             </ul>
@@ -281,8 +249,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── পরিচিতি — short, over a faint photo background ── */}
-      <section id="porichiti" className="relative scroll-mt-24 overflow-hidden border-y border-line">
+      {/* ── পরিচিতি ── */}
+      <section id="intro" className="relative overflow-hidden border-y border-line bg-ivory/60">
         <Image
           src="/ghee-jar-green.jpg"
           alt=""
@@ -290,22 +258,23 @@ export default function Home() {
           fill
           className="photo-warm object-cover object-[80%_50%] opacity-[0.15]"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-ivory/60 via-ivory/40 to-ivory/60" />
-        <div className="reveal relative mx-auto max-w-2xl px-5 py-16 text-center md:py-20">
-          <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
-            {intro.eyebrow}
-          </p>
-          <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
-            {intro.heading}
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-[17px] leading-relaxed text-cocoa-soft">
-            {intro.text}
-          </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-2">
+        <div className="relative mx-auto grid max-w-6xl gap-8 px-5 py-14 md:grid-cols-[1.1fr_0.9fr] md:px-8 md:py-20">
+          <div className="reveal">
+            <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
+              {intro.eyebrow}
+            </p>
+            <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
+              {intro.heading}
+            </h2>
+            <p className="mt-4 max-w-xl text-[16.5px] leading-relaxed text-cocoa-soft">
+              {intro.text}
+            </p>
+          </div>
+          <div className="reveal flex flex-wrap content-start gap-2.5">
             {intro.points.map((p) => (
               <span
                 key={p}
-                className="rounded-full border border-gold/50 bg-white/70 px-4 py-2 text-[14px] font-semibold text-cocoa"
+                className={`${fade} cursor-default rounded-full border border-line bg-ivory px-4 py-2 text-[14.5px] font-medium text-cocoa hover:-translate-y-0.5 hover:border-gold hover:text-gold-deep`}
               >
                 {p}
               </span>
@@ -314,47 +283,116 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Packs — 100g + 300g, one photo each ── */}
-      <section className="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-20">
-        <div className="reveal text-center">
-          <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
-            {packs.eyebrow}
-          </p>
-          <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
-            {packs.heading}
-          </h2>
-        </div>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 sm:gap-8">
-          {packs.items.map((p) => (
-            <article
-              key={p.size}
-              className="reveal lift overflow-hidden rounded-[24px] border border-line bg-ivory shadow-[0_18px_40px_-20px_rgb(140_106_31/0.4)]"
-            >
-              <div className="relative h-[240px] overflow-hidden bg-cream sm:h-[280px]">
-                <Image
-                  src={p.img}
-                  alt={p.alt}
-                  fill
-                  className="object-cover object-[50%_30%]"
-                />
+      {/* ── প্যাক নির্বাচন করুন — HoneyNest-type selector, Gheeya's own design ── */}
+      <section id="packs" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-14 md:px-8 md:py-20">
+        <div className="reveal overflow-hidden rounded-[28px] border border-line bg-ivory shadow-[0_24px_48px_-24px_rgb(154_52_18/0.45)]">
+          <div className="relative h-[230px] overflow-hidden bg-cream sm:h-[300px]">
+            <Image
+              key={pack}
+              src={selected.img}
+              alt={selected.alt}
+              fill
+              className="anim-swap object-cover object-[50%_30%]"
+            />
+            <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-ivory to-transparent" />
+            <span className="absolute left-5 top-5 rounded-full bg-cocoa/85 px-4 py-1.5 text-[13.5px] font-semibold text-ivory backdrop-blur-sm">
+              প্রিমিয়াম কাচের জার
+            </span>
+          </div>
+          <div className="p-6 sm:p-8">
+            <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
+              {packs.eyebrow}
+            </p>
+            <h2 className="mt-2 font-display text-[30px] font-semibold text-cocoa sm:text-[34px]">
+              {pack} প্যাক
+            </h2>
+            <p className="mt-1.5 text-[16px] text-cocoa-soft">
+              প্রিমিয়াম কাচের জার · ১০০% খাঁটি ঘি
+            </p>
+
+            <p className="mt-7 text-[15px] font-semibold text-cocoa">প্যাক নির্বাচন করুন:</p>
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              {packs.items.map((p) => {
+                const active = pack === p.size;
+                return (
+                  <button
+                    key={p.size}
+                    type="button"
+                    onClick={() => setPack(p.size)}
+                    aria-pressed={active}
+                    className={`relative rounded-[18px] border-2 p-4 text-left ${fade} hover:-translate-y-0.5 active:scale-[0.98] ${
+                      active
+                        ? "border-gold bg-butter/25 shadow-[0_10px_24px_-12px_rgb(194_65_12/0.6)]"
+                        : "border-line bg-white hover:border-gold/60"
+                    }`}
+                  >
+                    <span
+                      className={`absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full text-[13px] text-white transition-all duration-300 ${
+                        active ? "scale-100 bg-gold" : "scale-75 bg-line"
+                      }`}
+                    >
+                      {active ? "✓" : ""}
+                    </span>
+                    <span className="block font-display text-[19px] font-bold text-cocoa">
+                      {p.size}
+                    </span>
+                    <span className="mt-1 block text-[13.5px] leading-snug text-cocoa-faint">
+                      {p.note}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-[18px] border border-line bg-cream/70 px-5 py-4">
+              <div>
+                <p className="font-display text-[24px] font-bold leading-none text-cocoa">
+                  {qty}টি × {pack}
+                </p>
+                <p className="mt-1.5 text-[14px] text-cocoa-faint">মূল্য কলের সময় জানানো হবে</p>
               </div>
-              <div className="flex items-end justify-between gap-4 p-6">
-                <div>
-                  <p className="font-display text-[28px] font-bold leading-none text-cocoa">
-                    {p.size}
-                  </p>
-                  <p className="mt-2 text-[15px] text-cocoa-soft">{p.note}</p>
-                </div>
-                <a
-                  href="#order"
-                  onClick={() => setPack(p.size)}
-                  className="shrink-0 rounded-full bg-cocoa px-5 py-2.5 text-[15px] font-semibold text-ivory transition-colors hover:bg-gold-deep"
+              <div className="flex items-center gap-1.5">
+                <span className="mr-1 text-[14px] font-semibold text-cocoa">পরিমাণ</span>
+                <button
+                  type="button"
+                  aria-label="কমান"
+                  onClick={() => setQty((q) => Math.max(1, q - 1))}
+                  className={`flex h-9 w-9 items-center justify-center rounded-full border border-line bg-white text-[18px] text-cocoa ${fade} hover:border-gold hover:text-gold active:scale-90`}
                 >
-                  অর্ডার করুন
-                </a>
+                  −
+                </button>
+                <span className="w-8 text-center font-display text-[19px] font-bold text-cocoa">
+                  {qty}
+                </span>
+                <button
+                  type="button"
+                  aria-label="বাড়ান"
+                  onClick={() => setQty((q) => Math.min(9, q + 1))}
+                  className={`flex h-9 w-9 items-center justify-center rounded-full border border-line bg-white text-[18px] text-cocoa ${fade} hover:border-gold hover:text-gold active:scale-90`}
+                >
+                  +
+                </button>
               </div>
-            </article>
-          ))}
+            </div>
+
+            <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 rounded-[18px] border border-line bg-white/70 p-5">
+              {benefits.items.slice(0, 4).map((b) => (
+                <p key={b.title} className="flex items-start gap-2 text-[14.5px] leading-snug text-cocoa-soft">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gold text-[11px] font-bold text-white">
+                    ✓
+                  </span>
+                  {b.title}
+                </p>
+              ))}
+            </div>
+
+            <a
+              href="#order"
+              className={`${fade} mt-6 block rounded-full bg-gold py-4 text-center text-[17px] font-semibold text-white hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_16px_32px_-12px_rgb(154_52_18/0.7)] active:scale-[0.98]`}
+            >
+              অর্ডার করুন — {pack}
+            </a>
+          </div>
         </div>
       </section>
 
@@ -379,7 +417,7 @@ export default function Home() {
             {showcase.heading}
           </h2>
           <p className="mx-auto mt-3 max-w-md text-[17px] text-cocoa-soft">{showcase.text}</p>
-          <div className="mx-auto mt-8 flex max-w-md items-center justify-center gap-6 rounded-[20px] border border-line bg-ivory px-6 py-5 shadow-[0_18px_40px_-20px_rgb(140_106_31/0.4)]">
+          <div className="mx-auto mt-8 flex max-w-md items-center justify-center gap-6 rounded-[20px] border border-line bg-ivory px-6 py-5 shadow-[0_18px_40px_-20px_rgb(154_52_18/0.4)]">
             <div className="text-left">
               <p className="font-display text-[26px] font-bold text-cocoa">{showcase.size}</p>
               <p className="text-[13.5px] text-cocoa-faint">{showcase.sizeNote}</p>
@@ -394,7 +432,7 @@ export default function Home() {
             {showcase.uses.map((u) => (
               <span
                 key={u}
-                className="rounded-full border border-cocoa/25 bg-ivory/70 px-4 py-2 text-[14px] font-medium text-cocoa"
+                className={`${fade} cursor-default rounded-full border border-cocoa/25 bg-ivory/70 px-4 py-2 text-[14px] font-medium text-cocoa hover:-translate-y-0.5 hover:border-gold hover:text-gold-deep`}
               >
                 {u}
               </span>
@@ -403,9 +441,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Why Gheeya ── */}
-      <section id="keno" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-16 md:px-8 md:py-24">
-        <div className="reveal max-w-2xl">
+      {/* ── কেন Gheeya ── */}
+      <section id="why" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-14 md:px-8 md:py-20">
+        <div className="reveal text-center">
           <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
             {why.eyebrow}
           </p>
@@ -413,21 +451,24 @@ export default function Home() {
             {why.heading}
           </h2>
         </div>
-        <div className="mt-10 grid gap-10 md:grid-cols-3 md:gap-8">
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
           {why.items.map((w, i) => (
-            <div key={w.title} className="reveal border-t-2 border-gold pt-6">
-              <p className="font-display text-[15px] font-semibold text-gold">
-                {["০১", "০২", "০৩"][i]}
+            <article
+              key={w.title}
+              className={`reveal lift group rounded-[24px] border border-line bg-ivory p-7 ${fade} hover:border-gold/50`}
+            >
+              <p className="font-display text-[15px] font-bold text-gold transition-colors group-hover:text-gold-deep">
+                ০{i + 1}
               </p>
-              <h3 className="mt-2 font-display text-[22px] font-semibold text-cocoa">{w.title}</h3>
-              <p className="mt-2 text-[16px] leading-relaxed text-cocoa-soft">{w.text}</p>
-            </div>
+              <h3 className="mt-3 font-display text-[21px] font-semibold text-cocoa">{w.title}</h3>
+              <p className="mt-2 text-[15.5px] leading-relaxed text-cocoa-soft">{w.text}</p>
+            </article>
           ))}
         </div>
       </section>
 
-      {/* ── FAQ ── */}
-      <section id="jiggasha" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-16 md:px-8 md:py-24">
+      {/* ── জিজ্ঞাসা ── */}
+      <section id="faq" className="mx-auto max-w-3xl scroll-mt-24 px-5 pb-14 md:px-8 md:pb-20">
         <div className="reveal text-center">
           <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
             জিজ্ঞাসা
@@ -436,31 +477,43 @@ export default function Home() {
             জানতে চান?
           </h2>
         </div>
-        <div className="mt-9 space-y-3">
-          {faqs.map((f, i) => (
-            <div key={f.q} className="reveal overflow-hidden rounded-[18px] border border-line bg-white/60">
-              <button
-                type="button"
-                onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
-                aria-expanded={openFaq === i}
+        <div className="mt-8 space-y-3">
+          {faqs.map((f, i) => {
+            const open = openFaq === i;
+            return (
+              <div
+                key={f.q}
+                className={`reveal overflow-hidden rounded-[20px] border bg-ivory ${fade} ${
+                  open ? "border-gold/60 shadow-[0_14px_32px_-18px_rgb(154_52_18/0.5)]" : "border-line"
+                }`}
               >
-                <span className="font-display text-[18px] font-semibold text-cocoa">{f.q}</span>
-                <span className="shrink-0 text-[20px] leading-none text-gold-deep">
-                  {openFaq === i ? "−" : "+"}
-                </span>
-              </button>
-              {openFaq === i && (
-                <p className="border-t border-line/70 px-5 py-4 text-[16px] leading-relaxed text-cocoa-soft">
-                  {f.a}
-                </p>
-              )}
-            </div>
-          ))}
+                <button
+                  type="button"
+                  onClick={() => setOpenFaq(open ? null : i)}
+                  aria-expanded={open}
+                  className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
+                >
+                  <span className="text-[16.5px] font-semibold text-cocoa">{f.q}</span>
+                  <span
+                    className={`faq-chevron ${open ? "open" : ""} flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-[17px] ${
+                      open ? "border-gold bg-gold text-white" : "border-line text-cocoa-soft"
+                    }`}
+                  >
+                    +
+                  </span>
+                </button>
+                <div className={`faq-panel ${open ? "open" : ""}`}>
+                  <div>
+                    <p className="px-6 pb-5 text-[15.5px] leading-relaxed text-cocoa-soft">{f.a}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
-      {/* ── Order — faint photo background ── */}
+      {/* ── Order — with the product being bought ── */}
       <section id="order" className="relative scroll-mt-24 overflow-hidden border-t border-line">
         <Image
           src="/ghee-jar-warm.jpg"
@@ -469,8 +522,7 @@ export default function Home() {
           fill
           className="photo-warm object-cover object-[50%_20%] opacity-[0.14]"
         />
-        <div className="absolute inset-0 bg-cream/60" />
-        <div className="relative mx-auto max-w-3xl px-5 py-16 md:px-8 md:py-24">
+        <div className="relative mx-auto max-w-2xl px-5 py-14 md:px-8 md:py-20">
           <div className="reveal text-center">
             <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
               {order.eyebrow}
@@ -478,42 +530,72 @@ export default function Home() {
             <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
               {order.heading}
             </h2>
-            <p className="mx-auto mt-3 max-w-md text-[16.5px] leading-relaxed text-cocoa-soft">
-              {order.subtext}
+            <p className="mx-auto mt-3 max-w-md text-[16px] leading-relaxed text-cocoa-soft">
+              {order.note}
             </p>
           </div>
 
-          {orderId ? (
-            <div className="reveal is-visible mt-10 rounded-[24px] border border-gold/50 bg-ivory p-8 text-center shadow-[0_20px_44px_-18px_rgb(140_106_31/0.4)]">
-              <p className="font-display text-[26px] font-semibold text-cocoa">
-                অর্ডারটি পেয়েছি — ধন্যবাদ!
+          {done ? (
+            <div className="reveal anim-swap mt-8 rounded-[24px] border border-gold/40 bg-ivory p-8 text-center shadow-[0_24px_48px_-24px_rgb(154_52_18/0.5)]">
+              <p className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gold text-[26px] text-white">
+                ✓
               </p>
-              <p className="mt-3 text-[16px] leading-relaxed text-cocoa-soft">
-                আপনার অর্ডার নম্বর
+              <h3 className="mt-4 font-display text-[24px] font-semibold text-cocoa">
+                ধন্যবাদ, {name}!
+              </h3>
+              <p className="mx-auto mt-2 max-w-sm text-[15.5px] leading-relaxed text-cocoa-soft">
+                আপনার অর্ডারটি পেয়েছি — অর্ডার নম্বর{" "}
+                <span className="font-semibold text-cocoa">{orderId}</span>। আমরা শীঘ্রই{" "}
+                {phone} নম্বরে কল করে মূল্য ও ডেলিভারি নিশ্চিত করব।
               </p>
-              <p className="mt-1 font-display text-[24px] font-bold tracking-wide text-gold-deep">
-                {orderId}
-              </p>
-              <p className="mx-auto mt-3 max-w-sm text-[16px] leading-relaxed text-cocoa-soft">
-                {qty}টি {pack} প্যাক — আমরা শীঘ্রই কল করে মূল্য ও ডেলিভারি নিশ্চিত করব।
+              <p className="mt-3 text-[14.5px] text-cocoa-faint">
+                {qty}টি × {pack} প্যাক
               </p>
             </div>
           ) : (
             <form
-              onSubmit={submitOrder}
-              className="reveal mt-10 rounded-[24px] border border-line bg-ivory p-6 shadow-[0_20px_44px_-18px_rgb(140_106_31/0.35)] md:p-8"
+              onSubmit={submit}
+              className="reveal mt-8 overflow-hidden rounded-[24px] border border-line bg-ivory shadow-[0_24px_48px_-24px_rgb(154_52_18/0.45)]"
             >
-              <div className="space-y-5">
+              {/* Product being bought */}
+              <div className="flex items-center gap-4 border-b border-line bg-cream/60 p-5">
+                <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-line bg-cream">
+                  <Image
+                    key={pack}
+                    src={selected.img}
+                    alt={selected.alt}
+                    fill
+                    className="anim-swap object-cover object-[50%_25%]"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <p className="font-display text-[19px] font-bold leading-tight text-cocoa">
+                    Gheeya ঘি
+                  </p>
+                  <p className="mt-0.5 text-[14.5px] text-cocoa-soft">
+                    {pack} প্যাক · {qty}টি
+                  </p>
+                  <p className="mt-0.5 text-[13.5px] text-cocoa-faint">
+                    মূল্য কলের সময় জানানো হবে
+                  </p>
+                </div>
+                <span className="ml-auto hidden rounded-full bg-gold px-3.5 py-1.5 text-[12.5px] font-semibold text-white sm:block">
+                  ১০০% খাঁটি
+                </span>
+              </div>
+
+              <div className="space-y-4 p-6 sm:p-7">
                 <div>
                   <label htmlFor="name" className="mb-1.5 block text-[15px] font-semibold text-cocoa">
                     আপনার নাম
                   </label>
                   <input
                     id="name"
+                    required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="যেমন: রহিম উদ্দিন"
-                    className="w-full rounded-[14px] border border-line bg-white px-4 py-3 text-[16px] text-cocoa outline-none placeholder:text-cocoa-faint focus:border-gold"
+                    className="w-full rounded-[14px] border border-line bg-white px-4 py-3 text-[16px] text-cocoa outline-none transition-all placeholder:text-cocoa-faint/70 focus:border-gold focus:ring-4 focus:ring-gold/15"
                   />
                 </div>
                 <div>
@@ -522,24 +604,12 @@ export default function Home() {
                   </label>
                   <input
                     id="phone"
+                    required
                     inputMode="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="01XXXXXXXXX"
-                    className="w-full rounded-[14px] border border-line bg-white px-4 py-3 text-[16px] text-cocoa outline-none placeholder:text-cocoa-faint focus:border-gold"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="address" className="mb-1.5 block text-[15px] font-semibold text-cocoa">
-                    ঠিকানা
-                  </label>
-                  <textarea
-                    id="address"
-                    rows={2}
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    placeholder="বাসা/রোড, এলাকা, জেলা"
-                    className="w-full resize-none rounded-[14px] border border-line bg-white px-4 py-3 text-[16px] text-cocoa outline-none placeholder:text-cocoa-faint focus:border-gold"
+                    className="w-full rounded-[14px] border border-line bg-white px-4 py-3 text-[16px] text-cocoa outline-none transition-all placeholder:text-cocoa-faint/70 focus:border-gold focus:ring-4 focus:ring-gold/15"
                   />
                 </div>
                 <div>
@@ -553,10 +623,10 @@ export default function Home() {
                         type="button"
                         onClick={() => setPack(p.size)}
                         aria-pressed={pack === p.size}
-                        className={`rounded-[14px] border px-4 py-3 text-[16px] font-semibold transition-colors ${
+                        className={`rounded-[14px] border px-4 py-3 text-[16px] font-semibold ${fade} hover:-translate-y-0.5 active:scale-[0.98] ${
                           pack === p.size
-                            ? "border-gold bg-butter/40 text-cocoa"
-                            : "border-line bg-white text-cocoa-soft hover:border-gold"
+                            ? "border-gold bg-butter/30 text-cocoa shadow-[0_8px_20px_-10px_rgb(194_65_12/0.6)]"
+                            : "border-line bg-white text-cocoa-soft hover:border-gold/60"
                         }`}
                       >
                         {p.size}
@@ -568,37 +638,50 @@ export default function Home() {
                   <span className="text-[15px] font-semibold text-cocoa">
                     প্যাকের সংখ্যা · {pack} করে
                   </span>
-                  <span className="flex items-center gap-3">
+                  <span className="flex items-center gap-1.5">
                     <button
                       type="button"
-                      aria-label="একটি কমান"
+                      aria-label="কমান"
                       onClick={() => setQty((q) => Math.max(1, q - 1))}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-cocoa/25 text-[18px] text-cocoa"
+                      className={`flex h-9 w-9 items-center justify-center rounded-full border border-line bg-white text-[18px] text-cocoa ${fade} hover:border-gold hover:text-gold active:scale-90`}
                     >
                       −
                     </button>
-                    <span className="w-6 text-center font-display text-[20px] font-bold text-cocoa">
+                    <span className="w-8 text-center font-display text-[19px] font-bold text-cocoa">
                       {qty}
                     </span>
                     <button
                       type="button"
-                      aria-label="একটি বাড়ান"
-                      onClick={() => setQty((q) => Math.min(5, q + 1))}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-cocoa/25 text-[18px] text-cocoa"
+                      aria-label="বাড়ান"
+                      onClick={() => setQty((q) => Math.min(9, q + 1))}
+                      className={`flex h-9 w-9 items-center justify-center rounded-full border border-line bg-white text-[18px] text-cocoa ${fade} hover:border-gold hover:text-gold active:scale-90`}
                     >
                       +
                     </button>
                   </span>
                 </div>
-                {error && <p className="text-[15px] font-medium text-red-800">{error}</p>}
+                <div>
+                  <label htmlFor="address" className="mb-1.5 block text-[15px] font-semibold text-cocoa">
+                    ঠিকানা
+                  </label>
+                  <textarea
+                    id="address"
+                    required
+                    rows={3}
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    placeholder="বাড়ি/ফ্ল্যাট, রাস্তা, এলাকা, জেলা"
+                    className="w-full resize-none rounded-[14px] border border-line bg-white px-4 py-3 text-[16px] text-cocoa outline-none transition-all placeholder:text-cocoa-faint/70 focus:border-gold focus:ring-4 focus:ring-gold/15"
+                  />
+                </div>
                 <button
                   type="submit"
-                  className="w-full rounded-full bg-cocoa py-4 text-[17px] font-semibold text-ivory transition-colors hover:bg-gold-deep"
+                  className={`${fade} w-full rounded-full bg-gold py-4 text-[17px] font-semibold text-white hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_16px_32px_-12px_rgb(154_52_18/0.7)] active:scale-[0.98]`}
                 >
-                  অর্ডার নিশ্চিত করুন
+                  অর্ডার নিশ্চিত করুন — {qty}টি × {pack}
                 </button>
                 <p className="text-center text-[13.5px] leading-relaxed text-cocoa-faint">
-                  {order.note}
+                  ফর্মটি পূরণ করুন — আমরা কল করে মূল্য ও ডেলিভারি নিশ্চিত করব।
                 </p>
               </div>
             </form>
@@ -609,22 +692,19 @@ export default function Home() {
       {/* ── Footer ── */}
       <footer className="bg-cocoa text-ivory">
         <div className="mx-auto max-w-6xl px-5 py-12 md:px-8">
-          <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
+          <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
             <div>
-              <p className="font-display text-[28px] font-bold leading-none">
-                Gheeya <span className="text-[16px] font-medium text-butter">ঘি</span>
+              <p className="font-display text-[24px] font-bold">Gheeya <span className="text-[15px] text-butter">ঘি</span></p>
+              <p className="mt-2 max-w-xs text-[14.5px] leading-relaxed text-ivory/70">
+                {site.tagline} — খাঁটি এ২ গরুর ঘি, ধীরে জ্বাল দেওয়া।
               </p>
-              <p className="mt-3 text-[15px] text-ivory/70">{site.tagline}</p>
             </div>
-            <nav className="flex flex-wrap gap-x-6 gap-y-3">
-              {NAV.map((n) => (
-                <a key={n.href} href={n.href} className="text-[15px] text-ivory/80 hover:text-butter">
-                  {n.label}
-                </a>
-              ))}
-              <a href="#order" className="text-[15px] text-ivory/80 hover:text-butter">
-                অর্ডার করুন
-              </a>
+            <nav className="flex flex-wrap gap-x-6 gap-y-2 text-[15px] text-ivory/80">
+              <a href="#benefits" className={`${fade} hover:text-butter`}>গুণাগুণ</a>
+              <a href="#intro" className={`${fade} hover:text-butter`}>পরিচিতি</a>
+              <a href="#why" className={`${fade} hover:text-butter`}>কেন Gheeya</a>
+              <a href="#faq" className={`${fade} hover:text-butter`}>জিজ্ঞাসা</a>
+              <a href="#order" className={`${fade} hover:text-butter`}>অর্ডার করুন</a>
             </nav>
           </div>
           <div className="mt-10 border-t border-ivory/15 pt-6 text-center text-[13.5px] text-ivory/60">
@@ -633,6 +713,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-    </div>
+    </main>
   );
 }

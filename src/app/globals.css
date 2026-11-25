@@ -3,18 +3,19 @@
 @theme {
   --font-display: "Noto Serif Bengali", "Hind Siliguri", Georgia, serif;
   --font-sans: "Hind Siliguri", "Noto Sans Bengali", ui-sans-serif, system-ui, sans-serif;
-  --color-ivory: #fdf9ef;
-  --color-cream: #f7edd6;
-  --color-cream-deep: #f1e2c2;
-  --color-butter: #f2d98c;
-  --color-gold: #b98a2f;
-  --color-gold-deep: #8c6a1f;
-  --color-gold-soft: #d9b45b;
-  --color-cocoa: #3a2a18;
-  --color-cocoa-soft: #5c4632;
-  --color-cocoa-faint: #8a7360;
+  /* Light yellow + dark orange theme */
+  --color-ivory: #fffbeb;
+  --color-cream: #fef3c7;
+  --color-cream-deep: #fde68a;
+  --color-butter: #fbbf24;
+  --color-gold: #c2410c;
+  --color-gold-deep: #9a3412;
+  --color-gold-soft: #f59e0b;
+  --color-cocoa: #431407;
+  --color-cocoa-soft: #7c2d12;
+  --color-cocoa-faint: #9a6b3f;
   --color-olive: #6f6b3f;
-  --color-line: #e5d5b3;
+  --color-line: #f0d9a0;
 }
 
 html {
@@ -22,22 +23,22 @@ html {
 }
 
 body {
-  background-color: #fdf9ef;
-  /* Warm blurred ghee tones as the theme background, veiled in ivory */
+  background-color: #fffbeb;
+  /* Warm blurred ghee tones as the theme background, veiled in light yellow */
   background-image:
-    linear-gradient(rgb(253 249 239 / 0.9), rgb(253 249 239 / 0.9)),
+    linear-gradient(rgb(255 251 235 / 0.9), rgb(255 251 235 / 0.9)),
     url("/bg-gold-blur.jpg");
   background-attachment: fixed;
   background-size: cover;
   background-position: center;
-  color: #3a2a18;
+  color: #431407;
   font-family: var(--font-sans);
   overflow-x: clip;
 }
 
 ::selection {
-  background-color: #f2d98c;
-  color: #3a2a18;
+  background-color: #fde68a;
+  color: #431407;
 }
 
 /* Bengali headlines: no artificial letter-spacing, generous line-height */
@@ -46,17 +47,9 @@ h1, h2, h3 {
   text-wrap: balance;
 }
 
-/* Thin gold marquee strip */
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-.marquee-track {
-  animation: marquee 30s linear infinite;
-  will-change: transform;
-}
-.marquee:hover .marquee-track {
-  animation-play-state: paused;
+/* Warm filter for decorative background photos (never on product shots) */
+.photo-warm {
+  filter: sepia(0.22) saturate(1.12) contrast(1.02) brightness(0.97);
 }
 
 /* Gentle float for the hero jar */
@@ -81,6 +74,15 @@ h1, h2, h3 {
   animation: heroIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
 }
 
+/* Image / content swap (pack change) */
+@keyframes fadeSlide {
+  from { opacity: 0; transform: scale(1.03); }
+  to { opacity: 1; transform: scale(1); }
+}
+.anim-swap {
+  animation: fadeSlide 0.45s ease both;
+}
+
 /* Scroll reveal */
 .reveal {
   opacity: 0;
@@ -94,26 +96,23 @@ h1, h2, h3 {
   transform: none;
 }
 
-/* Warm filter for decorative background photos (never on product shots) */
-.photo-warm {
-  filter: sepia(0.22) saturate(1.12) contrast(1.02) brightness(0.97);
+/* FAQ smooth open / close */
+.faq-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
-
-/* Soft gold glow behind the hero jar */
-.gold-halo {
-  background: radial-gradient(
-    ellipse 62% 55% at 50% 42%,
-    rgb(242 217 140 / 0.55),
-    rgb(242 217 140 / 0.12) 62%,
-    transparent 78%
-  );
+.faq-panel.open {
+  grid-template-rows: 1fr;
 }
-
-/* Warm paper texture for the showcase band */
-.band-warm {
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgb(185 138 47 / 0.10), transparent 70%),
-    linear-gradient(180deg, #f7edd6 0%, #f3e5c6 100%);
+.faq-panel > div {
+  overflow: hidden;
+}
+.faq-chevron {
+  transition: transform 0.35s ease;
+}
+.faq-chevron.open {
+  transform: rotate(45deg);
 }
 
 .lift {
@@ -122,12 +121,13 @@ h1, h2, h3 {
 .lift:hover {
   transform: translateY(-4px);
   box-shadow:
-    0 14px 32px -14px rgb(140 106 31 / 0.35),
-    0 4px 12px -4px rgb(58 42 24 / 0.08);
+    0 14px 32px -14px rgb(154 52 18 / 0.35),
+    0 4px 12px -4px rgb(67 20 7 / 0.08);
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .marquee-track, .animate-float, .hero-in, .hero-in-delay { animation: none; }
+  .animate-float, .hero-in, .hero-in-delay, .anim-swap { animation: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
+  .faq-panel { transition: none; }
 }
