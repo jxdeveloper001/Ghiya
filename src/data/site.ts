@@ -3,13 +3,20 @@
 // CONFIGURABLE / NOT YET SUPPLIED BY THE USER — do not invent:
 // • PRICE (user-supplied 25 Nov ~12:32): 100g sale ৳199 (regular
 //   ৳250), 300g sale ৳699 (regular ৳820). Shown in the pack
-//   selector, summary, showcase, order form and success box.
+//   selector, summary, order form and success box.
 // • CONTACT (phone / email / address): not supplied. The footer
 //   shows "যোগাযোগের তথ্য শীঘ্রই আসছে" until filled in.
 // • DELIVERY / PAYMENT policy: not supplied. No COD claim is made;
 //   the FAQ + order section say delivery and payment are confirmed
 //   on the call.
-// • REVIEWS: none. No sample or invented testimonials on this site.
+// • REVIEWS: SAMPLES only (labelled "নমুনা রিভিউ" on the page) —
+//   no real customer reviews were ever supplied. Replace with real
+//   ones when the user sends them.
+// • VIDEO: the Gram Food / Gawa Ghee promo video the user sent
+//   (public/gheeya-video.mp4, 13s). The user first sent a 24s
+//   version by mistake, then replaced it with this 13s one
+//   (25 Nov 19:22) — it has no end card with contact info.
+//   The jar in the video carries the Gram Food label.
 // FACTS USED (from the supplied product photos only):
 // • 100% Natural, Chemical Free, A2 Gir Cow Milk, Rich in Nutrition
 // • Slow simmered clarified butter (ধীরে জ্বাল দিয়ে তৈরি)
@@ -39,15 +46,14 @@ export const site = {
 } as const;
 
 export const hero = {
-  eyebrow: "খাঁটি এ২ গরুর ঘি",
-  titleA: "খাঁটি ঘি,",
-  titleB: "ঠিক যেমনটা হওয়ার কথা",
-  subtext:
-    "ধীরে জ্বাল দিয়ে তৈরি খাঁটি এ২ গরুর ঘি — কোনো কিছু না মিশিয়ে। প্রতিদিনের রান্নায় সেই চেনা ঘ্রাণ।",
+  eyebrow: "ঘি — যেমনটা হওয়ার কথা",
+  titleA: "সোনালি ঘি,",
+  titleB: "খাঁটি স্বাদ",
+  subtext: "ধীরে জ্বাল দেওয়া এ২ গরুর ঘি — কোনো কিছু না মিশিয়ে।",
   primaryCta: "অর্ডার করুন",
   secondaryCta: "ঘি সম্পর্কে জানুন",
   chips: ["১০০% প্রাকৃতিক", "কেমিক্যালমুক্ত", "এ২ গরুর দুধ"],
-  jarAlt: "Gheeya ঘি — সোনালি খাঁটি ঘির জার",
+  jarAlt: "Gheeya ঘি — জার",
 } as const;
 
 export const intro = {
@@ -72,7 +78,7 @@ export const benefits = {
       no: "০২",
       icon: "shield",
       title: "কেমিক্যালমুক্ত",
-      text: "কোনো প্রিজারভেটিভ বা কেমিক্যাল নেই।",
+      text: "কোনো প্রিজারভেটিভ নেই।",
     },
     {
       no: "০৩",
@@ -86,12 +92,6 @@ export const benefits = {
       title: "ধীরে জ্বাল দেওয়া",
       text: "আস্তে আস্তে জ্বাল দিয়ে সোনালি ঘি।",
     },
-    {
-      no: "০৫",
-      icon: "sun",
-      title: "পুষ্টিগুণে ভরপুর",
-      text: "প্রতিদিনের রান্নায় সমৃদ্ধ স্বাদ।",
-    },
   ],
 } as const;
 
@@ -102,7 +102,7 @@ export const packs = {
     {
       size: "১০০ গ্রাম",
       sizeEn: "100g",
-      img: "/ghee-jar-green.jpg",
+      img: "/ghee-jar.jpg",
       alt: "Gheeya ঘি — ১০০ গ্রাম প্যাক",
       note: "প্রথমবার চেখে দেখার জন্য",
       sale: 199 as number | null,
@@ -111,22 +111,13 @@ export const packs = {
     {
       size: "৩০০ গ্রাম",
       sizeEn: "300g",
-      img: "/ghee-jar-warm.jpg",
+      img: "/ghee-jar.jpg",
       alt: "Gheeya ঘি — ৩০০ গ্রাম প্যাক",
       note: "নিয়মিত ব্যবহারের জন্য",
       sale: 699 as number | null,
       regular: 820 as number | null,
     },
   ],
-} as const;
-
-export const showcase = {
-  eyebrow: "পণ্য",
-  heading: "একটাই পণ্য, একটাই যত্ন",
-  text: "দুইটি প্যাকে — আপনার প্রয়োজন মতো বেছে নিন।",
-  size: "১০০ গ্রাম · ৩০০ গ্রাম",
-  sizeNote: "কাচের জার",
-  uses: ["ভাতের সঙ্গে এক চামচ", "রুটি-পরোটায়", "মিষ্টি ও পায়েসে", "প্রতিদিনের রান্নায়"],
 } as const;
 
 export const why = {
@@ -196,4 +187,10 @@ export const reviews = {
     { name: "মেহজাবিন চ.", role: "রাজশাহী", stars: 5, text: "পরোটা ভাজতে এই ঘি ব্যবহার করি, রঙ আর ঘ্রাণ দুটোই দারুণ আসে।" },
     { name: "হাসান ম.", role: "বরিশাল", stars: 5, text: "দ্বিতীয়বার অর্ডার করলাম। পরিবারের সবাই এখন Gheeya-ই খায়।" },
   ],
+} as const;
+
+export const videoSection = {
+  eyebrow: "ভিডিও",
+  heading: "ভিডিওতে দেখুন",
+  subtext: "বিরিয়ানি, মাটন কারি, চিকেন কারি, পরোটা — সবকিছুতেই Gheeya ঘি।",
 } as const;

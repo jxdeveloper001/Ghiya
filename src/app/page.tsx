@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { benefits, faqs, hero, intro, order, packs, reviews, showcase, site, why } from "@/data/site";
+import { benefits, faqs, hero, intro, order, packs, reviews, site, videoSection, why } from "@/data/site";
 
 const fade = "transition-all duration-300 ease-out";
 
@@ -37,6 +37,99 @@ const iconMap: Record<string, React.ReactNode> = {
     </svg>
   ),
 };
+
+function VideoSection() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const boxRef = useRef<HTMLDivElement>(null);
+  const [playing, setPlaying] = useState(false);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = boxRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), {
+      threshold: 0.35,
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // Pause when scrolled away so it only plays while being watched.
+  useEffect(() => {
+    if (!inView) videoRef.current?.pause();
+  }, [inView]);
+
+  const toggle = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) {
+      v.muted = false;
+      v.play().catch(() => {});
+    } else {
+      v.pause();
+    }
+  };
+
+  return (
+    <section id="video" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-20 md:px-8">
+      <div className="reveal text-center">
+        <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
+          {videoSection.eyebrow}
+        </p>
+        <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
+          {videoSection.heading}
+        </h2>
+        <p className="mx-auto mt-3 max-w-md text-[16px] leading-relaxed text-cocoa-soft">
+          {videoSection.subtext}
+        </p>
+      </div>
+      <div
+        ref={boxRef}
+        className="reveal relative mx-auto mt-8 max-w-[420px] overflow-hidden rounded-[28px] border border-line bg-cocoa shadow-[0_28px_56px_-20px_rgb(58_36_5/0.55)]"
+      >
+        <video
+          ref={videoRef}
+          src="/gheeya-video.mp4"
+          poster="/ghee-jar.jpg"
+          loop
+          playsInline
+          preload="metadata"
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          className="aspect-[4/5] w-full object-cover"
+        />
+        {playing ? (
+          <button
+            type="button"
+            onClick={toggle}
+            aria-label="ভিডিও থামান"
+            className={`${fade} absolute bottom-4 right-4 flex h-12 w-12 items-center justify-center rounded-full bg-cocoa/80 text-ivory backdrop-blur-sm hover:bg-cocoa active:scale-95`}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="6" y="5" width="4" height="14" rx="1" />
+              <rect x="14" y="5" width="4" height="14" rx="1" />
+            </svg>
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={toggle}
+            aria-label="ভিডিও চালান"
+            className={`absolute inset-0 flex items-center justify-center bg-cocoa/15 transition-all duration-500 hover:bg-cocoa/25 ${
+              inView ? "opacity-100 scale-100" : "pointer-events-none opacity-0 scale-90"
+            }`}
+          >
+            <span className="btn-layer-gold flex h-20 w-20 items-center justify-center rounded-full bg-gold text-white">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" className="ml-1">
+                <path d="M8 5.5v13l11-6.5z" />
+              </svg>
+            </span>
+          </button>
+        )}
+      </div>
+    </section>
+  );
+}
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -182,7 +275,7 @@ export default function Home() {
           </nav>
           <a
             href="#order"
-            className={`${fade} rounded-full bg-cocoa px-5 py-2.5 text-[15px] font-semibold text-ivory hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_10px_20px_-8px_rgb(124_42_32/0.6)] active:scale-95`}
+            className={`${fade} btn-layer-gold rounded-full bg-gold px-5 py-2.5 text-[15px] font-semibold text-white hover:-translate-y-0.5 hover:bg-gold-deep active:scale-95`}
           >
             অর্ডার করুন
           </a>
@@ -221,54 +314,46 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ── Hero — short, with AI-made low-res ghee background ── */}
+      {/* ── Hero — centered, like the reference image: golden-yellow
+           background, minimal text on the yellow, jar in the middle ── */}
       <section className="relative overflow-hidden">
         <Image
-          src="/hero-bg-low.jpg"
+          src="/hero-bg-gold.jpg"
           alt=""
           aria-hidden="true"
           fill
-          className="object-cover opacity-60"
+          priority
+          className="object-cover object-[50%_35%]"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-ivory/60 via-ivory/30 to-ivory" />
-        <div className="relative mx-auto grid max-w-6xl items-center gap-8 px-5 py-20 sm:gap-10 md:grid-cols-[1.05fr_0.95fr] md:px-8">
+        <div className="relative mx-auto flex max-w-3xl flex-col items-center px-5 pb-16 pt-14 text-center md:pb-20 md:pt-20">
           <div className="hero-in">
             <p className="text-[15px] font-semibold tracking-wide text-gold-deep">
               {hero.eyebrow}
             </p>
-            <h1 className="mt-2.5 font-display text-[32px] font-semibold text-cocoa sm:text-[42px] md:text-[46px]">
+            <h1 className="mt-2.5 font-display text-[38px] font-semibold leading-[1.2] text-cocoa sm:text-[52px] md:text-[58px]">
               {hero.titleA}
               <br />
-              <span className="text-gold">{hero.titleB}</span>
+              <span className="text-gold-deep">{hero.titleB}</span>
             </h1>
-            <p className="mt-4 max-w-md text-[16.5px] leading-relaxed text-cocoa-soft">
+            <p className="mx-auto mt-4 max-w-md text-[16.5px] leading-relaxed text-cocoa-soft">
               {hero.subtext}
             </p>
           </div>
-
-          <div className="hero-in-delay relative mx-auto w-full max-w-[300px] sm:max-w-[340px]">
-            <div className="animate-float relative overflow-hidden rounded-t-[170px] rounded-b-[28px] border border-line bg-cream shadow-[0_30px_60px_-20px_rgb(124_42_32/0.6)]">
-              <Image
-                src="/ghee-jar-warm.jpg"
-                alt="Gheeya ঘি — কাচের জার"
-                width={736}
-                height={1308}
-                priority
-                className="aspect-[3/3.6] w-full object-cover object-[50%_28%]"
-              />
-            </div>
-            <div className="absolute -left-3 top-12 rounded-full bg-ivory px-4 py-2 text-[14px] font-semibold text-cocoa shadow-[0_10px_24px_-8px_rgb(58_19_12/0.35)] sm:-left-6">
-              ১০০ গ্রাম · ৩০০ গ্রাম
-            </div>
-            <div className="absolute -bottom-3 right-2 rounded-full bg-cocoa px-4 py-2 text-[14px] font-semibold text-ivory shadow-[0_10px_24px_-8px_rgb(58_19_12/0.45)] sm:right-4">
-              ধীরে জ্বাল দেওয়া
-            </div>
+          <div className="hero-in-delay animate-float mt-9 w-[280px] overflow-hidden rounded-[28px] shadow-[0_30px_60px_-20px_rgb(58_36_5/0.55)] sm:w-[340px]">
+            <Image
+              src="/ghee-jar.jpg"
+              alt={hero.jarAlt}
+              width={1200}
+              height={1200}
+              priority
+              className="aspect-square w-full object-cover"
+            />
           </div>
         </div>
       </section>
 
-      {/* ── গুণাগুণ — image-led editorial list: jar photo + numbered
-           hairline rows. No card backgrounds anywhere in this section. ── */}
+      {/* ── গুণাগুণ — paint-splash style: product in the middle,
+           4 hand-painted blobs around it, dotted connectors (desktop) ── */}
       <section id="benefits" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-20 md:px-8">
         <div className="reveal text-center">
           <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
@@ -282,60 +367,72 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="mt-8 grid items-start gap-8 md:mt-10 md:grid-cols-[0.85fr_1.15fr] md:gap-14">
-          <div className="reveal overflow-hidden rounded-[24px] border border-line shadow-[0_28px_56px_-20px_rgb(124_42_32/0.6)]">
+        <div className="reveal relative mx-auto mt-10 max-w-5xl md:mt-12 md:h-[560px]">
+          {/* Dotted connectors (desktop only) */}
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 1000 560"
+            className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
+          >
+            <g stroke="#8a5e00" strokeWidth="2" fill="none" strokeDasharray="2 7" strokeLinecap="round" opacity="0.55">
+              <path d="M 250 110 C 320 130, 360 160, 395 200" />
+              <path d="M 250 450 C 320 430, 360 400, 395 360" />
+              <path d="M 750 110 C 680 130, 640 160, 605 200" />
+              <path d="M 750 450 C 680 430, 640 400, 605 360" />
+            </g>
+          </svg>
+
+          {/* Jar — centre on desktop, on top on phone */}
+          <div className="animate-float relative z-10 mx-auto w-[200px] overflow-hidden rounded-[28px] shadow-[0_28px_56px_-20px_rgb(58_36_5/0.55)] md:absolute md:left-1/2 md:top-1/2 md:w-[230px] md:-translate-x-1/2 md:-translate-y-1/2">
             <Image
-              src="/ghee-jar-green.jpg"
+              src="/ghee-jar.jpg"
               alt="Gheeya ঘি — জার"
-              width={433}
-              height={513}
-              className="aspect-[4/3] w-full object-cover object-[50%_30%] md:aspect-[3/4]"
+              width={1200}
+              height={1200}
+              className="aspect-square w-full object-cover"
             />
           </div>
-          <ul className="reveal">
-            {benefits.items.map((b) => (
-              <li
+
+          {/* Paint blobs */}
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 md:mt-0 md:block md:gap-0">
+            {benefits.items.map((b, i) => (
+              <div
                 key={b.title}
-                className="group flex items-start gap-4 border-b border-line py-5 first:pt-0 last:border-b-0 md:py-6"
+                className={`paint-blob group bg-white px-6 py-6 text-center shadow-[0_18px_36px_-18px_rgb(138_94_0/0.5)] ${fade} hover:-translate-y-1 md:absolute md:w-[290px] md:px-6 md:py-5 ${
+                  [
+                    "md:left-0 md:top-[2%] md:-rotate-2",
+                    "md:left-0 md:top-[60%] md:rotate-1",
+                    "md:right-0 md:top-[2%] md:rotate-2",
+                    "md:right-0 md:top-[60%] md:-rotate-1",
+                  ][i] ?? ""
+                }`}
               >
-                <span className="font-display text-[26px] font-bold leading-none text-gold/50 transition-colors duration-300 group-hover:text-gold">
-                  {b.no}
-                </span>
-                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gold/40 text-gold transition-transform duration-300 group-hover:scale-110">
+                <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-gold/12 text-gold transition-transform duration-300 group-hover:scale-110">
                   {iconMap[b.icon]}
                 </span>
-                <span>
-                  <span className="block text-[17px] font-bold leading-snug text-cocoa transition-transform duration-300 group-hover:translate-x-1">
-                    {b.title}
-                  </span>
-                  <span className="mt-0.5 block text-[14.5px] leading-snug text-cocoa-faint">
-                    {b.text}
-                  </span>
+                <span className="mt-2.5 block font-display text-[19px] font-bold leading-snug text-cocoa">
+                  {b.title}
                 </span>
-              </li>
+                <span className="mt-1 block text-[14px] leading-snug text-cocoa-faint">
+                  {b.text}
+                </span>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </section>
 
-      {/* ── পরিচিতি ── */}
-      <section id="intro" className="relative overflow-hidden border-y border-line bg-ivory/60">
-        <Image
-          src="/ghee-jar-green.jpg"
-          alt=""
-          aria-hidden="true"
-          fill
-          className="photo-warm object-cover object-[80%_50%] opacity-[0.15]"
-        />
+      {/* ── পরিচিতি — dark yellow band ── */}
+      <section id="intro" className="relative overflow-hidden bg-gold">
         <div className="relative mx-auto grid max-w-6xl gap-8 px-5 py-20 md:grid-cols-[1.1fr_0.9fr] md:px-8">
           <div className="reveal">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
+            <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-ivory/90">
               {intro.eyebrow}
             </p>
             <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
               {intro.heading}
             </h2>
-            <p className="mt-4 max-w-xl text-[16.5px] leading-relaxed text-cocoa-soft">
+            <p className="mt-4 max-w-xl text-[16.5px] leading-relaxed text-cocoa">
               {intro.text}
             </p>
           </div>
@@ -343,7 +440,7 @@ export default function Home() {
             {intro.points.map((p) => (
               <span
                 key={p}
-                className={`${fade} cursor-default rounded-full border border-line bg-ivory px-4 py-2 text-[14.5px] font-medium text-cocoa hover:-translate-y-0.5 hover:border-gold hover:text-gold-deep`}
+                className={`${fade} cursor-default rounded-full border border-ivory/50 bg-ivory/90 px-4 py-2 text-[14.5px] font-medium text-cocoa hover:-translate-y-0.5 hover:border-ivory`}
               >
                 {p}
               </span>
@@ -354,19 +451,18 @@ export default function Home() {
 
       {/* ── প্যাক নির্বাচন করুন — HoneyNest-type selector, Gheeya's own design ── */}
       <section id="packs" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-20 md:px-8">
-        <div className="reveal overflow-hidden rounded-[28px] border border-line bg-ivory shadow-[0_28px_56px_-20px_rgb(124_42_32/0.6)]">
-          <div className="relative h-[230px] overflow-hidden bg-cream sm:h-[300px]">
-            <Image
-              key={pack}
-              src={selected.img}
-              alt={selected.alt}
-              fill
-              className="anim-swap object-cover object-[50%_30%]"
-            />
-            <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-ivory to-transparent" />
-            <span className="absolute left-5 top-5 rounded-full bg-cocoa/85 px-4 py-1.5 text-[13.5px] font-semibold text-ivory backdrop-blur-sm">
-              প্রিমিয়াম কাচের জার
-            </span>
+        <div className="reveal overflow-hidden rounded-[28px] border border-line bg-ivory shadow-[0_28px_56px_-20px_rgb(138_94_0/0.55)]">
+          <div className="flex justify-center border-b border-line bg-cream/60 px-5 pb-2 pt-6">
+            <div className="relative w-[170px] sm:w-[190px]">
+              <Image
+                key={pack}
+                src={selected.img}
+                alt={selected.alt}
+                width={1200}
+                height={1200}
+                className="anim-swap img-feather aspect-square w-full object-contain"
+              />
+            </div>
           </div>
           <div className="p-6 sm:p-8">
             <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
@@ -486,7 +582,7 @@ export default function Home() {
 
             <a
               href="#order"
-              className={`${fade} mt-6 block rounded-full bg-gold py-4 text-center text-[17px] font-semibold text-white hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_16px_32px_-12px_rgb(124_42_32/0.7)] active:scale-[0.98]`}
+              className={`${fade} btn-layer-cocoa mt-6 block rounded-full bg-cocoa py-4 text-center text-[17px] font-semibold text-ivory hover:-translate-y-0.5 active:scale-[0.98]`}
             >
               অর্ডার করুন — {pack}
             </a>
@@ -494,61 +590,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Showcase — photo background with warm filter, solid cream (no glass) ── */}
-      <section className="relative overflow-hidden border-y border-line">
-        <Image
-          src="/ghee-jar-warm.jpg"
-          alt=""
-          aria-hidden="true"
-          fill
-          className="photo-warm object-cover object-[50%_30%]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-cream/85 via-cream/60 to-cream/85" />
-        <div className="reveal relative mx-auto max-w-3xl px-5 py-20 text-center">
-          <p className="font-display text-[22px] font-medium italic text-gold-deep sm:text-[26px]">
-            “{site.tagline}”
-          </p>
-          <p className="mt-6 text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
-            {showcase.eyebrow}
-          </p>
-          <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[40px]">
-            {showcase.heading}
-          </h2>
-          <p className="mx-auto mt-3 max-w-md text-[17px] text-cocoa-soft">{showcase.text}</p>
-          <div className="mx-auto mt-8 flex max-w-md items-center justify-center gap-6 rounded-[20px] border border-line bg-ivory px-6 py-5 shadow-[0_18px_40px_-20px_rgb(124_42_32/0.4)]">
-            <div className="text-left">
-              <p className="font-display text-[26px] font-bold text-cocoa">{showcase.size}</p>
-              <p className="text-[13.5px] text-cocoa-faint">{showcase.sizeNote}</p>
-            </div>
-            <div className="h-12 w-px bg-line" />
-            <div className="text-left">
-              <p className="font-display text-[18px] font-semibold text-cocoa">মূল্য</p>
-              {packs.items.every((p) => p.sale === null) ? (
-                <p className="text-[13.5px] leading-snug text-cocoa-faint">কলের সময় জানানো হবে</p>
-              ) : (
-                <p className="text-[13.5px] leading-snug text-cocoa-faint">
-                  {packs.items
-                    .map((p) => (p.sale !== null ? `${p.size} ${bnPrice(p.sale)}` : `${p.size} —`))
-                    .join(" · ")}
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="mt-8 flex flex-wrap justify-center gap-2">
-            {showcase.uses.map((u) => (
-              <span
-                key={u}
-                className={`${fade} cursor-default rounded-full border border-cocoa/25 bg-ivory/70 px-4 py-2 text-[14px] font-medium text-cocoa hover:-translate-y-0.5 hover:border-gold hover:text-gold-deep`}
-              >
-                {u}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── রিভিউ — auto right-to-left infinite slider + prev/next buttons ── */}
-      <section id="reviews" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-20 md:px-8">
+      <section id="reviews" className="scroll-mt-24 bg-cream-deep/60 py-20">
+        <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="reveal flex flex-wrap items-end justify-between gap-5">
           <div className="text-center md:text-left">
             <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
@@ -623,7 +667,11 @@ export default function Home() {
             ))}
           </div>
         </div>
+        </div>
       </section>
+
+      {/* ── ভিডিও — scroll into view: play button appears, click to play ── */}
+      <VideoSection />
 
       {/* ── কেন Gheeya ── */}
       <section id="why" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-20 md:px-8">
@@ -705,23 +753,16 @@ export default function Home() {
       </section>
 
       {/* ── Order — with the product being bought ── */}
-      <section id="order" className="relative scroll-mt-24 overflow-hidden border-t border-line">
-        <Image
-          src="/ghee-jar-warm.jpg"
-          alt=""
-          aria-hidden="true"
-          fill
-          className="photo-warm object-cover object-[50%_20%] opacity-[0.14]"
-        />
+      <section id="order" className="relative scroll-mt-24 overflow-hidden bg-gold">
         <div className="relative mx-auto max-w-2xl px-5 py-20 md:px-8">
           <div className="reveal text-center">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
+            <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-ivory/90">
               {order.eyebrow}
             </p>
             <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
               {order.heading}
             </h2>
-            <p className="mx-auto mt-3 max-w-md text-[16px] leading-relaxed text-cocoa-soft">
+            <p className="mx-auto mt-3 max-w-md text-[16px] leading-relaxed text-cocoa">
               {order.note}
             </p>
           </div>
@@ -761,7 +802,7 @@ export default function Home() {
                     src={selected.img}
                     alt={selected.alt}
                     fill
-                    className="anim-swap object-cover object-[50%_25%]"
+                    className="anim-swap object-contain p-1"
                   />
                 </div>
                 <div className="min-w-0">
@@ -892,7 +933,7 @@ export default function Home() {
                 </div>
                 <button
                   type="submit"
-                  className={`${fade} flex w-full flex-col items-center rounded-[18px] bg-gold py-3.5 text-white hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_16px_32px_-12px_rgb(124_42_32/0.7)] active:scale-[0.98]`}
+                  className={`${fade} btn-layer-deep flex w-full flex-col items-center rounded-[18px] bg-gold-deep py-3.5 text-ivory hover:-translate-y-0.5 active:scale-[0.98]`}
                 >
                   <span className="font-display text-[18px] font-bold leading-tight">
                     অর্ডার নিশ্চিত করুন

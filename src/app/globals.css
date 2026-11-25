@@ -3,19 +3,20 @@
 @theme {
   --font-display: "Noto Serif Bengali", "Hind Siliguri", Georgia, serif;
   --font-sans: "Hind Siliguri", "Noto Sans Bengali", ui-sans-serif, system-ui, sans-serif;
-  /* Cream base + light maroon accent, dark shadows */
+  /* Dark yellow + cream theme (sampled from the hero background
+     image: dark yellow #b67c02, cream #f0e2bb) */
   --color-ivory: #fffbeb;
-  --color-cream: #fef3c7;
-  --color-cream-deep: #fde68a;
-  --color-butter: #fbbf24;
-  --color-gold: #a63a2e;
-  --color-gold-deep: #7c2a20;
-  --color-gold-soft: #c97b5a;
-  --color-cocoa: #3a130c;
-  --color-cocoa-soft: #6b2a1e;
-  --color-cocoa-faint: #96604f;
+  --color-cream: #fbf3d5;
+  --color-cream-deep: #f0e2bb;
+  --color-butter: #f6d876;
+  --color-gold: #b67c02;
+  --color-gold-deep: #8a5e00;
+  --color-gold-soft: #d9a404;
+  --color-cocoa: #3a2405;
+  --color-cocoa-soft: #6b4a12;
+  --color-cocoa-faint: #96793f;
   --color-olive: #6f6b3f;
-  --color-line: #f0d9a0;
+  --color-line: #e7d6a4;
 }
 
 html {
@@ -24,21 +25,14 @@ html {
 
 body {
   background-color: #fffbeb;
-  /* Warm blurred ghee tones as the theme background, veiled in light yellow */
-  background-image:
-    linear-gradient(rgb(255 251 235 / 0.9), rgb(255 251 235 / 0.9)),
-    url("/bg-gold-blur.jpg");
-  background-attachment: fixed;
-  background-size: cover;
-  background-position: center;
-  color: #431407;
+  color: #3a2405;
   font-family: var(--font-sans);
   overflow-x: clip;
 }
 
 ::selection {
-  background-color: #fde68a;
-  color: #431407;
+  background-color: #f0e2bb;
+  color: #3a2405;
 }
 
 /* Bengali headlines: no artificial letter-spacing, generous line-height */
@@ -121,8 +115,36 @@ h1, h2, h3 {
 .lift:hover {
   transform: translateY(-4px);
   box-shadow:
-    0 20px 40px -14px rgb(124 42 32 / 0.5),
-    0 6px 16px -6px rgb(58 19 12 / 0.18);
+    0 20px 40px -14px rgb(138 94 0 / 0.5),
+    0 6px 16px -6px rgb(58 36 5 / 0.18);
+}
+
+/* Layered buttons — a solid darker layer under the button,
+   echoing the layered wave in the hero background image */
+.btn-layer-gold {
+  border-bottom: 4px solid #8a5e00;
+  box-shadow: 0 10px 22px -10px rgb(138 94 0 / 0.65);
+}
+.btn-layer-cocoa {
+  border-bottom: 4px solid #241503;
+  box-shadow: 0 10px 22px -10px rgb(58 36 5 / 0.65);
+}
+.btn-layer-deep {
+  border-bottom: 4px solid #5c3d00;
+  box-shadow: 0 10px 22px -10px rgb(138 94 0 / 0.65);
+}
+
+/* Paint-splash blob (benefits) — organic hand-painted shape */
+.paint-blob {
+  border-radius: 58% 42% 55% 45% / 48% 55% 45% 52%;
+}
+
+/* Feather a square product photo into its background — edges fade out.
+   closest-side = the ellipse touches the image edges, so the fade
+   actually reaches the corners (a 94% size made the whole image opaque). */
+.img-feather {
+  -webkit-mask-image: radial-gradient(ellipse closest-side, black 60%, transparent 99%);
+  mask-image: radial-gradient(ellipse closest-side, black 60%, transparent 99%);
 }
 
 @media (prefers-reduced-motion: reduce) {
