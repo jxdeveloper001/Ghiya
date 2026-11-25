@@ -788,7 +788,7 @@ export default function Home() {
 
               <div className="space-y-4 p-6 sm:p-7">
                 <div>
-                  <label htmlFor="name" className="mb-1.5 block text-[15px] font-semibold text-cocoa">
+                  <label htmlFor="name" className="mb-1.5 block font-display text-[16px] font-semibold text-cocoa">
                     আপনার নাম
                   </label>
                   <input
@@ -801,7 +801,7 @@ export default function Home() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="phone" className="mb-1.5 block text-[15px] font-semibold text-cocoa">
+                  <label htmlFor="phone" className="mb-1.5 block font-display text-[16px] font-semibold text-cocoa">
                     মোবাইল নম্বর
                   </label>
                   <input
@@ -815,7 +815,7 @@ export default function Home() {
                   />
                 </div>
                 <div>
-                  <span className="mb-1.5 block text-[15px] font-semibold text-cocoa">
+                  <span className="mb-1.5 block font-display text-[16px] font-semibold text-cocoa">
                     প্যাক বেছে নিন
                   </span>
                   <div className="grid grid-cols-2 gap-2">
@@ -825,45 +825,59 @@ export default function Home() {
                         type="button"
                         onClick={() => setPack(p.size)}
                         aria-pressed={pack === p.size}
-                        className={`rounded-[14px] border px-4 py-3 text-[16px] font-semibold ${fade} hover:-translate-y-0.5 active:scale-[0.98] ${
+                        className={`flex flex-col items-center rounded-[14px] border px-4 py-3.5 ${fade} hover:-translate-y-0.5 active:scale-[0.98] ${
                           pack === p.size
-                            ? "border-gold bg-butter/30 text-cocoa shadow-[0_8px_20px_-10px_rgb(166_58_46/0.6)]"
-                            : "border-line bg-white text-cocoa-soft hover:border-gold/60"
+                            ? "border-gold bg-butter/30 shadow-[0_8px_20px_-10px_rgb(166_58_46/0.6)]"
+                            : "border-line bg-white hover:border-gold/60"
                         }`}
                       >
-                        {p.size}
+                        <span className="text-[16px] font-semibold leading-none text-cocoa">
+                          {p.size}
+                        </span>
+                        {p.sale !== null && (
+                          <span className="mt-1.5 leading-none">
+                            <span className="font-display text-[17px] font-bold text-gold">
+                              {bnPrice(p.sale)}
+                            </span>
+                            {p.regular !== null && (
+                              <span className="ml-1.5 text-[13px] text-cocoa-faint line-through">
+                                {bnPrice(p.regular)}
+                              </span>
+                            )}
+                          </span>
+                        )}
                       </button>
                     ))}
                   </div>
                 </div>
                 <div className="flex items-center justify-between rounded-[14px] border border-line bg-cream/70 px-4 py-3">
-                  <span className="text-[15px] font-semibold text-cocoa">
-                    প্যাকের সংখ্যা · {pack} করে
+                  <span className="font-display text-[16px] font-semibold text-cocoa">
+                    প্যাকের সংখ্যা
                   </span>
-                  <span className="flex items-center gap-1.5">
+                  <span className="flex items-center gap-2">
                     <button
                       type="button"
                       aria-label="কমান"
                       onClick={() => setQty((q) => Math.max(1, q - 1))}
-                      className={`flex h-9 w-9 items-center justify-center rounded-full border border-line bg-white text-[18px] text-cocoa ${fade} hover:border-gold hover:text-gold active:scale-90`}
+                      className={`flex h-10 w-10 items-center justify-center rounded-full border border-line bg-white text-[20px] leading-none text-cocoa ${fade} hover:border-gold hover:text-gold active:scale-90`}
                     >
                       −
                     </button>
-                    <span className="w-8 text-center font-display text-[19px] font-bold text-cocoa">
+                    <span className="w-8 text-center font-display text-[20px] font-bold text-cocoa">
                       {qty}
                     </span>
                     <button
                       type="button"
                       aria-label="বাড়ান"
                       onClick={() => setQty((q) => Math.min(9, q + 1))}
-                      className={`flex h-9 w-9 items-center justify-center rounded-full border border-line bg-white text-[18px] text-cocoa ${fade} hover:border-gold hover:text-gold active:scale-90`}
+                      className={`flex h-10 w-10 items-center justify-center rounded-full border border-line bg-white text-[20px] leading-none text-cocoa ${fade} hover:border-gold hover:text-gold active:scale-90`}
                     >
                       +
                     </button>
                   </span>
                 </div>
                 <div>
-                  <label htmlFor="address" className="mb-1.5 block text-[15px] font-semibold text-cocoa">
+                  <label htmlFor="address" className="mb-1.5 block font-display text-[16px] font-semibold text-cocoa">
                     ঠিকানা
                   </label>
                   <textarea
@@ -878,10 +892,15 @@ export default function Home() {
                 </div>
                 <button
                   type="submit"
-                  className={`${fade} w-full rounded-full bg-gold py-4 text-[17px] font-semibold text-white hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_16px_32px_-12px_rgb(124_42_32/0.7)] active:scale-[0.98]`}
+                  className={`${fade} flex w-full flex-col items-center rounded-[18px] bg-gold py-3.5 text-white hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_16px_32px_-12px_rgb(124_42_32/0.7)] active:scale-[0.98]`}
                 >
-                  অর্ডার নিশ্চিত করুন — {qty}টি × {pack}
-                  {selected.sale !== null ? ` · মোট ${bnPrice(selected.sale * qty)}` : ""}
+                  <span className="font-display text-[18px] font-bold leading-tight">
+                    অর্ডার নিশ্চিত করুন
+                  </span>
+                  <span className="mt-0.5 text-[13.5px] font-medium leading-tight text-white/85">
+                    {qty}টি × {pack}
+                    {selected.sale !== null ? ` · মোট ${bnPrice(selected.sale * qty)}` : ""}
+                  </span>
                 </button>
                 <p className="text-center text-[13.5px] leading-relaxed text-cocoa-faint">
                   ফর্মটি পূরণ করুন — আমরা কল করে মূল্য ও ডেলিভারি নিশ্চিত করব।
