@@ -11,9 +11,12 @@
 //   on the call.
 // • REVIEWS: none. No sample or invented testimonials on this site.
 // FACTS USED (from the supplied product photos only):
-// • 500ml jar (ছবির জারে "500ML / 16 Oz" লেখা)
 // • 100% Natural, Chemical Free, A2 Gir Cow Milk, Rich in Nutrition
 // • Slow simmered clarified butter (ধীরে জ্বাল দিয়ে তৈরি)
+// PACKS (user-supplied, 25 Nov): 100g and 300g. Note: the supplied
+// jar photos show a "500ML" label — the pack sizes above are the
+// user's own, the photos are reference only until real Gheeya
+// labelled photos arrive.
 // COPY RULE: short lines, image-led. No long paragraphs.
 // ─────────────────────────────────────────────────────────────
 
@@ -51,7 +54,7 @@ export const intro = {
   eyebrow: "পরিচিতি",
   heading: "ধীরে জ্বাল দেওয়া, সোনালি ঘি",
   text: "ভালো ঘি তাড়াহুড়ো করে হয় না। দুধ থেকে মাখন, মাখন থেকে ধীরে ধীরে জ্বাল দিয়ে সোনালি ঘি — এই ধৈর্যটাই Gheeya-র পরিচয়।",
-  points: ["ধীরে জ্বাল দেওয়া", "৫০০ মিলি কাচের জার"],
+  points: ["১০০ গ্রাম ও ৩০০ গ্রাম প্যাক", "কাচের জার"],
 } as const;
 
 export const benefits = {
@@ -92,12 +95,33 @@ export const benefits = {
   ],
 } as const;
 
+export const packs = {
+  eyebrow: "প্যাক",
+  heading: "আপনার মতো করে বেছে নিন",
+  items: [
+    {
+      size: "১০০ গ্রাম",
+      sizeEn: "100g",
+      img: "/ghee-jar-green.jpg",
+      alt: "Gheeya ঘি — ১০০ গ্রাম প্যাক",
+      note: "প্রথমবার চেখে দেখার জন্য",
+    },
+    {
+      size: "৩০০ গ্রাম",
+      sizeEn: "300g",
+      img: "/ghee-jar-warm.jpg",
+      alt: "Gheeya ঘি — ৩০০ গ্রাম প্যাক",
+      note: "নিয়মিত ব্যবহারের জন্য",
+    },
+  ],
+} as const;
+
 export const showcase = {
   eyebrow: "পণ্য",
   heading: "একটাই পণ্য, একটাই যত্ন",
-  text: "৫০০ মিলি কাচের জার — প্রতিদিনের রান্নার জন্য।",
-  size: "৫০০ মিলি",
-  sizeNote: "কাচের জার · ছবির জার অনুযায়ী",
+  text: "দুইটি প্যাকে — আপনার প্রয়োজন মতো বেছে নিন।",
+  size: "১০০ গ্রাম · ৩০০ গ্রাম",
+  sizeNote: "কাচের জার",
   uses: ["ভাতের সঙ্গে এক চামচ", "রুটি-পরোটায়", "মিষ্টি ও পায়েসে", "প্রতিদিনের রান্নায়"],
 } as const;
 
@@ -126,8 +150,8 @@ export const faqs = [
     a: "হ্যাঁ — ১০০% প্রাকৃতিক ও কেমিক্যালমুক্ত, এ২ গরুর দুধ থেকে ধীরে জ্বাল দিয়ে তৈরি।",
   },
   {
-    q: "একটি জারে কতটুকু ঘি থাকে?",
-    a: "একটি জারে ৫০০ মিলি ঘি থাকে।",
+    q: "কোন কোন প্যাকে পাওয়া যায়?",
+    a: "Gheeya দুইটি প্যাকে পাওয়া যায় — ১০০ গ্রাম ও ৩০০ গ্রাম।",
   },
   {
     q: "ঘি কিভাবে সংরক্ষণ করব?",

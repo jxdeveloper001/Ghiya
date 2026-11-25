@@ -94,6 +94,11 @@ h1, h2, h3 {
   transform: none;
 }
 
+/* Warm filter for decorative background photos (never on product shots) */
+.photo-warm {
+  filter: sepia(0.22) saturate(1.12) contrast(1.02) brightness(0.97);
+}
+
 /* Soft gold glow behind the hero jar */
 .gold-halo {
   background: radial-gradient(

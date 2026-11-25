@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { benefits, faqs, hero, intro, order, showcase, site, why } from "@/data/site";
+import { benefits, faqs, hero, intro, order, packs, showcase, site, why } from "@/data/site";
 
 const NAV = [
   { href: "#gunagun", label: "গুণাগুণ" },
@@ -72,6 +72,7 @@ function BenefitIcon({ name }: { name: string }) {
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [pack, setPack] = useState("৩০০ গ্রাম");
   const [qty, setQty] = useState(1);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -215,7 +216,7 @@ export default function Home() {
               />
             </div>
             <div className="absolute -left-3 top-16 rounded-full bg-ivory px-4 py-2 text-[14px] font-semibold text-cocoa shadow-[0_10px_24px_-8px_rgb(58_42_24/0.35)] sm:-left-6">
-              ৫০০ মিলি জার
+              ১০০ গ্রাম · ৩০০ গ্রাম
             </div>
             <div className="absolute -right-2 bottom-14 rounded-full bg-cocoa px-4 py-2 text-[14px] font-semibold text-ivory shadow-[0_10px_24px_-8px_rgb(58_42_24/0.45)] sm:-right-5">
               ধীরে জ্বাল দেওয়া
@@ -287,7 +288,7 @@ export default function Home() {
           alt=""
           aria-hidden="true"
           fill
-          className="object-cover object-[80%_50%] opacity-[0.12]"
+          className="photo-warm object-cover object-[80%_50%] opacity-[0.15]"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ivory/60 via-ivory/40 to-ivory/60" />
         <div className="reveal relative mx-auto max-w-2xl px-5 py-16 text-center md:py-20">
@@ -313,43 +314,87 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Showcase — full-bleed photo band ── */}
-      <section className="relative overflow-hidden">
+      {/* ── Packs — 100g + 300g, one photo each ── */}
+      <section className="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-20">
+        <div className="reveal text-center">
+          <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
+            {packs.eyebrow}
+          </p>
+          <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
+            {packs.heading}
+          </h2>
+        </div>
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 sm:gap-8">
+          {packs.items.map((p) => (
+            <article
+              key={p.size}
+              className="reveal lift overflow-hidden rounded-[24px] border border-line bg-ivory shadow-[0_18px_40px_-20px_rgb(140_106_31/0.4)]"
+            >
+              <div className="relative h-[240px] overflow-hidden bg-cream sm:h-[280px]">
+                <Image
+                  src={p.img}
+                  alt={p.alt}
+                  fill
+                  className="object-cover object-[50%_30%]"
+                />
+              </div>
+              <div className="flex items-end justify-between gap-4 p-6">
+                <div>
+                  <p className="font-display text-[28px] font-bold leading-none text-cocoa">
+                    {p.size}
+                  </p>
+                  <p className="mt-2 text-[15px] text-cocoa-soft">{p.note}</p>
+                </div>
+                <a
+                  href="#order"
+                  onClick={() => setPack(p.size)}
+                  className="shrink-0 rounded-full bg-cocoa px-5 py-2.5 text-[15px] font-semibold text-ivory transition-colors hover:bg-gold-deep"
+                >
+                  অর্ডার করুন
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Showcase — photo background with warm filter, solid cream (no glass) ── */}
+      <section className="relative overflow-hidden border-y border-line">
         <Image
           src="/ghee-jar-warm.jpg"
           alt=""
           aria-hidden="true"
           fill
-          className="object-cover object-[50%_30%]"
+          className="photo-warm object-cover object-[50%_30%]"
         />
-        <div className="absolute inset-0 bg-cocoa/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-cream/85 via-cream/60 to-cream/85" />
         <div className="reveal relative mx-auto max-w-3xl px-5 py-16 text-center md:py-24">
-          <p className="font-display text-[22px] font-medium italic text-butter sm:text-[26px]">
+          <p className="font-display text-[22px] font-medium italic text-gold-deep sm:text-[26px]">
             “{site.tagline}”
           </p>
-          <p className="mt-6 text-[13px] font-semibold uppercase tracking-[0.18em] text-butter/90">
+          <p className="mt-6 text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
             {showcase.eyebrow}
           </p>
-          <h2 className="mt-3 font-display text-[30px] font-semibold text-ivory sm:text-[40px]">
+          <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[40px]">
             {showcase.heading}
           </h2>
-          <p className="mx-auto mt-3 max-w-md text-[17px] text-ivory/85">{showcase.text}</p>
-          <div className="mx-auto mt-8 flex max-w-md items-center justify-center gap-6 rounded-[20px] border border-ivory/25 bg-ivory/10 px-6 py-5 backdrop-blur-sm">
+          <p className="mx-auto mt-3 max-w-md text-[17px] text-cocoa-soft">{showcase.text}</p>
+          <div className="mx-auto mt-8 flex max-w-md items-center justify-center gap-6 rounded-[20px] border border-line bg-ivory px-6 py-5 shadow-[0_18px_40px_-20px_rgb(140_106_31/0.4)]">
             <div className="text-left">
-              <p className="font-display text-[26px] font-bold text-ivory">{showcase.size}</p>
-              <p className="text-[13.5px] text-ivory/75">{showcase.sizeNote}</p>
+              <p className="font-display text-[26px] font-bold text-cocoa">{showcase.size}</p>
+              <p className="text-[13.5px] text-cocoa-faint">{showcase.sizeNote}</p>
             </div>
-            <div className="h-12 w-px bg-ivory/25" />
+            <div className="h-12 w-px bg-line" />
             <div className="text-left">
-              <p className="font-display text-[18px] font-semibold text-ivory">মূল্য</p>
-              <p className="text-[13.5px] leading-snug text-ivory/75">কলের সময় জানানো হবে</p>
+              <p className="font-display text-[18px] font-semibold text-cocoa">মূল্য</p>
+              <p className="text-[13.5px] leading-snug text-cocoa-faint">কলের সময় জানানো হবে</p>
             </div>
           </div>
           <div className="mt-8 flex flex-wrap justify-center gap-2">
             {showcase.uses.map((u) => (
               <span
                 key={u}
-                className="rounded-full border border-ivory/40 px-4 py-2 text-[14px] font-medium text-ivory"
+                className="rounded-full border border-cocoa/25 bg-ivory/70 px-4 py-2 text-[14px] font-medium text-cocoa"
               >
                 {u}
               </span>
@@ -422,7 +467,7 @@ export default function Home() {
           alt=""
           aria-hidden="true"
           fill
-          className="object-cover object-[50%_20%] opacity-[0.14]"
+          className="photo-warm object-cover object-[50%_20%] opacity-[0.14]"
         />
         <div className="absolute inset-0 bg-cream/60" />
         <div className="relative mx-auto max-w-3xl px-5 py-16 md:px-8 md:py-24">
@@ -450,8 +495,7 @@ export default function Home() {
                 {orderId}
               </p>
               <p className="mx-auto mt-3 max-w-sm text-[16px] leading-relaxed text-cocoa-soft">
-                {qty}টি জার ({showcase.size} করে) — আমরা শীঘ্রই কল করে মূল্য ও ডেলিভারি
-                নিশ্চিত করব।
+                {qty}টি {pack} প্যাক — আমরা শীঘ্রই কল করে মূল্য ও ডেলিভারি নিশ্চিত করব।
               </p>
             </div>
           ) : (
@@ -498,9 +542,31 @@ export default function Home() {
                     className="w-full resize-none rounded-[14px] border border-line bg-white px-4 py-3 text-[16px] text-cocoa outline-none placeholder:text-cocoa-faint focus:border-gold"
                   />
                 </div>
+                <div>
+                  <span className="mb-1.5 block text-[15px] font-semibold text-cocoa">
+                    প্যাক বেছে নিন
+                  </span>
+                  <div className="grid grid-cols-2 gap-2">
+                    {packs.items.map((p) => (
+                      <button
+                        key={p.size}
+                        type="button"
+                        onClick={() => setPack(p.size)}
+                        aria-pressed={pack === p.size}
+                        className={`rounded-[14px] border px-4 py-3 text-[16px] font-semibold transition-colors ${
+                          pack === p.size
+                            ? "border-gold bg-butter/40 text-cocoa"
+                            : "border-line bg-white text-cocoa-soft hover:border-gold"
+                        }`}
+                      >
+                        {p.size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <div className="flex items-center justify-between rounded-[14px] border border-line bg-cream/70 px-4 py-3">
                   <span className="text-[15px] font-semibold text-cocoa">
-                    জারের সংখ্যা · {showcase.size} করে
+                    প্যাকের সংখ্যা · {pack} করে
                   </span>
                   <span className="flex items-center gap-3">
                     <button
