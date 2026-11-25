@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { benefits, faqs, hero, intro, order, packs, reviews, site, videoSection, why } from "@/data/site";
+import { benefits, faqs, hero, intro, order, packs, reviews, site, videoSection } from "@/data/site";
 
 const fade = "transition-all duration-300 ease-out";
 
@@ -71,7 +71,7 @@ function VideoSection() {
   };
 
   return (
-    <section id="video" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-20 md:px-8">
+    <section id="video" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-[60px] md:px-8">
       <div className="reveal text-center">
         <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
           {videoSection.eyebrow}
@@ -270,12 +270,11 @@ export default function Home() {
           <nav className="hidden items-center gap-8 text-[15px] font-medium text-cocoa-soft md:flex">
             <a href="#benefits" className={`${fade} hover:text-gold`}>গুণাগুণ</a>
             <a href="#intro" className={`${fade} hover:text-gold`}>পরিচিতি</a>
-            <a href="#why" className={`${fade} hover:text-gold`}>কেন Gheeya</a>
             <a href="#faq" className={`${fade} hover:text-gold`}>জিজ্ঞাসা</a>
           </nav>
           <a
             href="#order"
-            className={`${fade} btn-layer-gold rounded-full bg-gold px-5 py-2.5 text-[15px] font-semibold text-white hover:-translate-y-0.5 hover:bg-gold-deep active:scale-95`}
+            className={`${fade} btn-layer-gold btn-shine rounded-full bg-gold px-5 py-2.5 text-[15px] font-semibold text-white hover:-translate-y-0.5 hover:bg-gold-deep active:scale-95`}
           >
             অর্ডার করুন
           </a>
@@ -297,7 +296,6 @@ export default function Home() {
               {[
                 ["#benefits", "গুণাগুণ"],
                 ["#intro", "পরিচিতি"],
-                ["#why", "কেন Gheeya"],
                 ["#faq", "জিজ্ঞাসা"],
               ].map(([href, label]) => (
                 <a
@@ -325,36 +323,49 @@ export default function Home() {
           priority
           className="object-cover object-[50%_35%]"
         />
-        <div className="relative mx-auto flex max-w-3xl flex-col items-center px-5 pb-16 pt-14 text-center md:pb-20 md:pt-20">
+        <div className="relative mx-auto flex max-w-3xl flex-col items-center px-5 pb-[60px] pt-[60px] text-center">
           <div className="hero-in">
-            <p className="text-[15px] font-semibold tracking-wide text-gold-deep">
+            <p className="text-[15px] font-semibold tracking-wide text-ivory/85">
               {hero.eyebrow}
             </p>
-            <h1 className="mt-2.5 font-display text-[38px] font-semibold leading-[1.2] text-cocoa sm:text-[52px] md:text-[58px]">
+            <h1 className="mt-2.5 font-display text-[38px] font-semibold leading-[1.2] text-ivory sm:text-[52px] md:text-[58px]">
               {hero.titleA}
               <br />
-              <span className="text-gold-deep">{hero.titleB}</span>
+              <span className="text-ivory">{hero.titleB}</span>
             </h1>
-            <p className="mx-auto mt-4 max-w-md text-[16.5px] leading-relaxed text-cocoa-soft">
+            <p className="mx-auto mt-4 max-w-md text-[16.5px] leading-relaxed text-ivory/90">
               {hero.subtext}
             </p>
           </div>
-          <div className="hero-in-delay animate-float mt-9 w-[280px] overflow-hidden rounded-[28px] shadow-[0_30px_60px_-20px_rgb(58_36_5/0.55)] sm:w-[340px]">
+          {/* Jar — no box, no frame: just the picture, feathered into
+              the background, a little bigger */}
+          <div className="hero-in-delay animate-float mt-9 w-[300px] sm:w-[380px]">
             <Image
               src="/ghee-jar.jpg"
               alt={hero.jarAlt}
               width={1200}
               height={1200}
               priority
-              className="aspect-square w-full object-cover"
+              className="img-feather aspect-square w-full object-cover"
             />
           </div>
+          <p className="hero-in-delay mt-7 text-[16px] font-semibold text-cocoa">
+            {packs.items
+              .map((p) => (p.sale !== null ? `${p.size} ${bnPrice(p.sale)}` : p.size))
+              .join(" · ")}
+          </p>
+          <a
+            href="#order"
+            className={`${fade} btn-layer-gold btn-shine hero-in-delay mt-4 rounded-full bg-gold px-8 py-3.5 text-[16px] font-semibold text-white hover:-translate-y-0.5 hover:bg-gold-deep active:scale-95`}
+          >
+            অর্ডার করুন
+          </a>
         </div>
       </section>
 
       {/* ── গুণাগুণ — paint-splash style: product in the middle,
            4 hand-painted blobs around it, dotted connectors (desktop) ── */}
-      <section id="benefits" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-20 md:px-8">
+      <section id="benefits" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-[60px] md:px-8">
         <div className="reveal text-center">
           <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
             {benefits.eyebrow}
@@ -424,7 +435,7 @@ export default function Home() {
 
       {/* ── পরিচিতি — dark yellow band ── */}
       <section id="intro" className="relative overflow-hidden bg-gold">
-        <div className="relative mx-auto grid max-w-6xl gap-8 px-5 py-20 md:grid-cols-[1.1fr_0.9fr] md:px-8">
+        <div className="relative mx-auto grid max-w-6xl gap-8 px-5 py-[60px] md:grid-cols-[1.1fr_0.9fr] md:px-8">
           <div className="reveal">
             <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-ivory/90">
               {intro.eyebrow}
@@ -450,7 +461,7 @@ export default function Home() {
       </section>
 
       {/* ── প্যাক নির্বাচন করুন — HoneyNest-type selector, Gheeya's own design ── */}
-      <section id="packs" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-20 md:px-8">
+      <section id="packs" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-[60px] md:px-8">
         <div className="reveal overflow-hidden rounded-[28px] border border-line bg-ivory shadow-[0_28px_56px_-20px_rgb(138_94_0/0.55)]">
           <div className="flex justify-center border-b border-line bg-cream/60 px-5 pb-2 pt-6">
             <div className="relative w-[170px] sm:w-[190px]">
@@ -487,7 +498,7 @@ export default function Home() {
                     aria-pressed={active}
                     className={`relative rounded-[18px] border-2 p-4 text-left ${fade} hover:-translate-y-0.5 active:scale-[0.98] ${
                       active
-                        ? "border-gold bg-butter/25 shadow-[0_10px_24px_-12px_rgb(166_58_46/0.6)]"
+                        ? "border-gold bg-butter/25 shadow-[0_10px_24px_-12px_rgb(182_124_2/0.6)]"
                         : "border-line bg-white hover:border-gold/60"
                     }`}
                   >
@@ -582,7 +593,7 @@ export default function Home() {
 
             <a
               href="#order"
-              className={`${fade} btn-layer-cocoa mt-6 block rounded-full bg-cocoa py-4 text-center text-[17px] font-semibold text-ivory hover:-translate-y-0.5 active:scale-[0.98]`}
+              className={`${fade} btn-layer-cocoa btn-shine mt-6 block rounded-full bg-cocoa py-4 text-center text-[17px] font-semibold text-ivory hover:-translate-y-0.5 active:scale-[0.98]`}
             >
               অর্ডার করুন — {pack}
             </a>
@@ -591,7 +602,7 @@ export default function Home() {
       </section>
 
       {/* ── রিভিউ — auto right-to-left infinite slider + prev/next buttons ── */}
-      <section id="reviews" className="scroll-mt-24 bg-cream-deep/60 py-20">
+      <section id="reviews" className="scroll-mt-24 bg-cream-deep/60 py-[60px]">
         <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="reveal flex flex-wrap items-end justify-between gap-5">
           <div className="text-center md:text-left">
@@ -610,7 +621,7 @@ export default function Home() {
               type="button"
               onClick={revPrev}
               aria-label="আগের রিভিউ"
-              className={`${fade} flex h-12 w-12 items-center justify-center rounded-full border border-line bg-ivory text-gold-deep shadow-[0_10px_20px_-10px_rgb(124_42_32/0.5)] hover:-translate-y-0.5 hover:border-gold hover:bg-gold hover:text-white active:scale-95`}
+              className={`${fade} flex h-12 w-12 items-center justify-center rounded-full border border-line bg-ivory text-gold-deep shadow-[0_10px_20px_-10px_rgb(138_94_0/0.5)] hover:-translate-y-0.5 hover:border-gold hover:bg-gold hover:text-white active:scale-95`}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M15 5l-7 7 7 7" />
@@ -620,7 +631,7 @@ export default function Home() {
               type="button"
               onClick={revNext}
               aria-label="পরের রিভিউ"
-              className={`${fade} flex h-12 w-12 items-center justify-center rounded-full border border-line bg-ivory text-gold-deep shadow-[0_10px_20px_-10px_rgb(124_42_32/0.5)] hover:-translate-y-0.5 hover:border-gold hover:bg-gold hover:text-white active:scale-95`}
+              className={`${fade} flex h-12 w-12 items-center justify-center rounded-full border border-line bg-ivory text-gold-deep shadow-[0_10px_20px_-10px_rgb(138_94_0/0.5)] hover:-translate-y-0.5 hover:border-gold hover:bg-gold hover:text-white active:scale-95`}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M9 5l7 7-7 7" />
@@ -642,7 +653,7 @@ export default function Home() {
             {[...reviews.items, ...reviews.items].map((r, i) => (
               <figure
                 key={i}
-                className="w-[85%] shrink-0 rounded-[20px] border border-line bg-ivory p-6 shadow-[0_18px_36px_-20px_rgb(124_42_32/0.45)] sm:w-[47%] lg:w-[31.5%]"
+                className="w-[85%] shrink-0 rounded-[20px] border border-line bg-ivory p-6 shadow-[0_18px_36px_-20px_rgb(138_94_0/0.45)] sm:w-[47%] lg:w-[31.5%]"
               >
                 <div className="flex gap-0.5 text-[17px] text-gold" aria-label={`${r.stars} / ৫`}>
                   {[0, 1, 2, 3, 4].map((s) => (
@@ -673,34 +684,8 @@ export default function Home() {
       {/* ── ভিডিও — scroll into view: play button appears, click to play ── */}
       <VideoSection />
 
-      {/* ── কেন Gheeya ── */}
-      <section id="why" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-20 md:px-8">
-        <div className="reveal text-center">
-          <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
-            {why.eyebrow}
-          </p>
-          <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
-            {why.heading}
-          </h2>
-        </div>
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {why.items.map((w, i) => (
-            <article
-              key={w.title}
-              className={`reveal lift group rounded-[24px] border border-line bg-ivory p-7 ${fade} hover:border-gold/50`}
-            >
-              <p className="font-display text-[15px] font-bold text-gold transition-colors group-hover:text-gold-deep">
-                ০{i + 1}
-              </p>
-              <h3 className="mt-3 font-display text-[21px] font-semibold text-cocoa">{w.title}</h3>
-              <p className="mt-2 text-[15.5px] leading-relaxed text-cocoa-soft">{w.text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
       {/* ── জিজ্ঞাসা ── */}
-      <section id="faq" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-20 md:px-8">
+      <section id="faq" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-[60px] md:px-8">
         <div className="reveal text-center">
           <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
             জিজ্ঞাসা
@@ -716,7 +701,7 @@ export default function Home() {
               <div
                 key={f.q}
                 className={`reveal overflow-hidden rounded-[20px] border bg-ivory ${fade} ${
-                  open ? "border-gold/60 shadow-[0_14px_32px_-18px_rgb(124_42_32/0.5)]" : "border-line"
+                  open ? "border-gold/60 shadow-[0_14px_32px_-18px_rgb(138_94_0/0.5)]" : "border-line"
                 }`}
               >
                 <button
@@ -754,7 +739,7 @@ export default function Home() {
 
       {/* ── Order — with the product being bought ── */}
       <section id="order" className="relative scroll-mt-24 overflow-hidden bg-gold">
-        <div className="relative mx-auto max-w-2xl px-5 py-20 md:px-8">
+        <div className="relative mx-auto max-w-2xl px-5 py-[60px] md:px-8">
           <div className="reveal text-center">
             <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-ivory/90">
               {order.eyebrow}
@@ -768,7 +753,7 @@ export default function Home() {
           </div>
 
           {done ? (
-            <div className="reveal anim-swap mt-8 rounded-[24px] border border-gold/40 bg-ivory p-8 text-center shadow-[0_24px_48px_-24px_rgb(124_42_32/0.5)]">
+            <div className="reveal anim-swap mt-8 rounded-[24px] border border-gold/40 bg-ivory p-8 text-center shadow-[0_24px_48px_-24px_rgb(138_94_0/0.5)]">
               <p className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gold text-[26px] text-white">
                 ✓
               </p>
@@ -792,7 +777,7 @@ export default function Home() {
           ) : (
             <form
               onSubmit={submit}
-              className="reveal mt-8 overflow-hidden rounded-[24px] border border-line bg-ivory shadow-[0_28px_56px_-20px_rgb(124_42_32/0.6)]"
+              className="reveal mt-8 overflow-hidden rounded-[24px] border border-line bg-ivory shadow-[0_28px_56px_-20px_rgb(138_94_0/0.6)]"
             >
               {/* Product being bought */}
               <div className="flex items-center gap-4 border-b border-line bg-cream/60 p-5">
@@ -802,7 +787,7 @@ export default function Home() {
                     src={selected.img}
                     alt={selected.alt}
                     fill
-                    className="anim-swap object-contain p-1"
+                    className="anim-swap img-feather object-contain p-1"
                   />
                 </div>
                 <div className="min-w-0">
@@ -868,7 +853,7 @@ export default function Home() {
                         aria-pressed={pack === p.size}
                         className={`flex flex-col items-center rounded-[14px] border px-4 py-3.5 ${fade} hover:-translate-y-0.5 active:scale-[0.98] ${
                           pack === p.size
-                            ? "border-gold bg-butter/30 shadow-[0_8px_20px_-10px_rgb(166_58_46/0.6)]"
+                            ? "border-gold bg-butter/30 shadow-[0_8px_20px_-10px_rgb(182_124_2/0.6)]"
                             : "border-line bg-white hover:border-gold/60"
                         }`}
                       >
@@ -933,7 +918,7 @@ export default function Home() {
                 </div>
                 <button
                   type="submit"
-                  className={`${fade} btn-layer-deep flex w-full flex-col items-center rounded-[18px] bg-gold-deep py-3.5 text-ivory hover:-translate-y-0.5 active:scale-[0.98]`}
+                  className={`${fade} btn-layer-deep btn-shine flex w-full flex-col items-center rounded-[18px] bg-gold-deep py-3.5 text-ivory hover:-translate-y-0.5 active:scale-[0.98]`}
                 >
                   <span className="font-display text-[18px] font-bold leading-tight">
                     অর্ডার নিশ্চিত করুন
@@ -954,7 +939,7 @@ export default function Home() {
 
       {/* ── Footer ── */}
       <footer className="bg-cocoa text-ivory">
-        <div className="mx-auto max-w-6xl px-5 py-20 md:px-8">
+        <div className="mx-auto max-w-6xl px-5 py-[60px] md:px-8">
           <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
             <div>
               <p className="font-display text-[24px] font-bold">Gheeya <span className="text-[15px] text-butter">ঘি</span></p>
@@ -965,7 +950,6 @@ export default function Home() {
             <nav className="flex flex-wrap gap-x-6 gap-y-2 text-[15px] text-ivory/80">
               <a href="#benefits" className={`${fade} hover:text-butter`}>গুণাগুণ</a>
               <a href="#intro" className={`${fade} hover:text-butter`}>পরিচিতি</a>
-              <a href="#why" className={`${fade} hover:text-butter`}>কেন Gheeya</a>
               <a href="#faq" className={`${fade} hover:text-butter`}>জিজ্ঞাসা</a>
               <a href="#order" className={`${fade} hover:text-butter`}>অর্ডার করুন</a>
             </nav>

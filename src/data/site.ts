@@ -120,25 +120,6 @@ export const packs = {
   ],
 } as const;
 
-export const why = {
-  eyebrow: "কেন Gheeya",
-  heading: "তিনটি কারণেই ভরসা",
-  items: [
-    {
-      title: "তাড়াহুড়ো নয়",
-      text: "ধীরে জ্বাল দিলেই আসে সোনালি রং আর গভীর ঘ্রাণ।",
-    },
-    {
-      title: "কিছুই মেশানো নেই",
-      text: "যা লেখা আছে, তা-ই ভেতরে।",
-    },
-    {
-      title: "প্রতিটি জার একই",
-      text: "প্রথম জার যেমন, শেষ জারও তেমন।",
-    },
-  ],
-} as const;
-
 export const faqs = [
   {
     q: "Gheeya ঘি কি সম্পূর্ণ খাঁটি?",
