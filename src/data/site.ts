@@ -1,11 +1,9 @@
 // ─────────────────────────────────────────────────────────────
 // Gheeya — all editable site content lives here.
 // CONFIGURABLE / NOT YET SUPPLIED BY THE USER — do not invent:
-// • PRICE: not supplied yet (user asked 25 Nov ~12:20 to show prices
-//   everywhere — the UI is wired to `packs.items[].sale/regular`
-//   below, but both are null until the user gives real numbers.
-//   NEVER invent a price: with null, the site shows "মূল্য কলের
-//   সময় জানানো হবে" until real prices are filled in.
+// • PRICE (user-supplied 25 Nov ~12:32): 100g sale ৳199 (regular
+//   ৳250), 300g sale ৳699 (regular ৳820). Shown in the pack
+//   selector, summary, showcase, order form and success box.
 // • CONTACT (phone / email / address): not supplied. The footer
 //   shows "যোগাযোগের তথ্য শীঘ্রই আসছে" until filled in.
 // • DELIVERY / PAYMENT policy: not supplied. No COD claim is made;
@@ -107,8 +105,8 @@ export const packs = {
       img: "/ghee-jar-green.jpg",
       alt: "Gheeya ঘি — ১০০ গ্রাম প্যাক",
       note: "প্রথমবার চেখে দেখার জন্য",
-      sale: null as number | null,
-      regular: null as number | null,
+      sale: 199 as number | null,
+      regular: 250 as number | null,
     },
     {
       size: "৩০০ গ্রাম",
@@ -116,8 +114,8 @@ export const packs = {
       img: "/ghee-jar-warm.jpg",
       alt: "Gheeya ঘি — ৩০০ গ্রাম প্যাক",
       note: "নিয়মিত ব্যবহারের জন্য",
-      sale: null as number | null,
-      regular: null as number | null,
+      sale: 699 as number | null,
+      regular: 820 as number | null,
     },
   ],
 } as const;
