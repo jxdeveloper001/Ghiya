@@ -169,7 +169,7 @@ export default function Home() {
           className="object-cover opacity-60"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ivory/60 via-ivory/30 to-ivory" />
-        <div className="relative mx-auto grid max-w-6xl items-center gap-8 px-5 py-10 sm:gap-10 md:grid-cols-[1.05fr_0.95fr] md:px-8">
+        <div className="relative mx-auto grid max-w-6xl items-center gap-8 px-5 py-20 sm:gap-10 md:grid-cols-[1.05fr_0.95fr] md:px-8">
           <div className="hero-in">
             <p className="text-[15px] font-semibold tracking-wide text-gold-deep">
               {hero.eyebrow}
@@ -207,7 +207,7 @@ export default function Home() {
 
       {/* ── গুণাগুণ — image-led editorial list: jar photo + numbered
            hairline rows. No card backgrounds anywhere in this section. ── */}
-      <section id="benefits" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-10 md:px-8">
+      <section id="benefits" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-20 md:px-8">
         <div className="reveal text-center">
           <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
             {benefits.eyebrow}
@@ -265,7 +265,7 @@ export default function Home() {
           fill
           className="photo-warm object-cover object-[80%_50%] opacity-[0.15]"
         />
-        <div className="relative mx-auto grid max-w-6xl gap-8 px-5 py-10 md:grid-cols-[1.1fr_0.9fr] md:px-8">
+        <div className="relative mx-auto grid max-w-6xl gap-8 px-5 py-20 md:grid-cols-[1.1fr_0.9fr] md:px-8">
           <div className="reveal">
             <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
               {intro.eyebrow}
@@ -291,7 +291,7 @@ export default function Home() {
       </section>
 
       {/* ── প্যাক নির্বাচন করুন — HoneyNest-type selector, Gheeya's own design ── */}
-      <section id="packs" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-10 md:px-8">
+      <section id="packs" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-20 md:px-8">
         <div className="reveal overflow-hidden rounded-[28px] border border-line bg-ivory shadow-[0_28px_56px_-20px_rgb(124_42_32/0.6)]">
           <div className="relative h-[230px] overflow-hidden bg-cream sm:h-[300px]">
             <Image
@@ -442,7 +442,7 @@ export default function Home() {
           className="photo-warm object-cover object-[50%_30%]"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-cream/85 via-cream/60 to-cream/85" />
-        <div className="reveal relative mx-auto max-w-3xl px-5 py-10 text-center">
+        <div className="reveal relative mx-auto max-w-3xl px-5 py-20 text-center">
           <p className="font-display text-[22px] font-medium italic text-gold-deep sm:text-[26px]">
             “{site.tagline}”
           </p>
@@ -486,7 +486,7 @@ export default function Home() {
       </section>
 
       {/* ── কেন Gheeya ── */}
-      <section id="why" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-10 md:px-8">
+      <section id="why" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-20 md:px-8">
         <div className="reveal text-center">
           <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
             {why.eyebrow}
@@ -512,7 +512,7 @@ export default function Home() {
       </section>
 
       {/* ── জিজ্ঞাসা ── */}
-      <section id="faq" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-10 md:px-8">
+      <section id="faq" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-20 md:px-8">
         <div className="reveal text-center">
           <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
             জিজ্ঞাসা
@@ -573,7 +573,7 @@ export default function Home() {
           fill
           className="photo-warm object-cover object-[50%_20%] opacity-[0.14]"
         />
-        <div className="relative mx-auto max-w-2xl px-5 py-10 md:px-8">
+        <div className="relative mx-auto max-w-2xl px-5 py-20 md:px-8">
           <div className="reveal text-center">
             <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
               {order.eyebrow}
@@ -754,7 +754,7 @@ export default function Home() {
 
       {/* ── Footer ── */}
       <footer className="bg-cocoa text-ivory">
-        <div className="mx-auto max-w-6xl px-5 py-10 md:px-8">
+        <div className="mx-auto max-w-6xl px-5 py-20 md:px-8">
           <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
             <div>
               <p className="font-display text-[24px] font-bold">Gheeya <span className="text-[15px] text-butter">ঘি</span></p>
