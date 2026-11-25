@@ -64,13 +64,25 @@ export default function Home() {
 
   const selected = packs.items.find((p) => p.size === pack) ?? packs.items[1];
 
+  // Bengali-digit price, e.g. ৳১,৯৬০. Prices live in site.ts and are
+  // null until the user supplies real numbers — never invented.
+  const bnPrice = (n: number) =>
+    "৳" + n.toLocaleString("en-IN").replace(/\d/g, (d) => "০১২৩৪৫৬৭৮৯"[Number(d)]);
+
   useEffect(() => {
     const els = Array.from(document.querySelectorAll(".reveal"));
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           if (e.isIntersecting) {
-            e.target.classList.add("is-visible");
+            // ROOT FIX: reveal with inline style, never classList.
+            // React rewrites className on re-render (e.g. FAQ open
+            // changes the border class) and would wipe an added
+            // "is-visible" class — the card then faded out forever.
+            // Inline style survives React re-renders.
+            const el = e.target as HTMLElement;
+            el.style.opacity = "1";
+            el.style.transform = "none";
             io.unobserve(e.target);
           }
         }
@@ -157,7 +169,7 @@ export default function Home() {
           className="object-cover opacity-60"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ivory/60 via-ivory/30 to-ivory" />
-        <div className="relative mx-auto grid max-w-6xl items-center gap-8 px-5 pb-12 pt-8 sm:gap-10 md:grid-cols-[1.05fr_0.95fr] md:px-8 md:pb-16 md:pt-12">
+        <div className="relative mx-auto grid max-w-6xl items-center gap-8 px-5 py-10 sm:gap-10 md:grid-cols-[1.05fr_0.95fr] md:px-8">
           <div className="hero-in">
             <p className="text-[15px] font-semibold tracking-wide text-gold-deep">
               {hero.eyebrow}
@@ -170,30 +182,6 @@ export default function Home() {
             <p className="mt-4 max-w-md text-[16.5px] leading-relaxed text-cocoa-soft">
               {hero.subtext}
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <a
-                href="#order"
-                className={`${fade} rounded-full bg-gold px-7 py-3.5 text-[16px] font-semibold text-white hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_14px_28px_-10px_rgb(124_42_32/0.7)] active:scale-95`}
-              >
-                {hero.primaryCta}
-              </a>
-              <a
-                href="#intro"
-                className={`${fade} rounded-full border border-cocoa/25 bg-ivory/80 px-7 py-3.5 text-[16px] font-semibold text-cocoa hover:-translate-y-0.5 hover:border-gold hover:text-gold active:scale-95`}
-              >
-                {hero.secondaryCta}
-              </a>
-            </div>
-            <div className="mt-6 flex flex-wrap gap-2">
-              {hero.chips.map((c) => (
-                <span
-                  key={c}
-                  className={`${fade} cursor-default rounded-full border border-line bg-ivory/80 px-3.5 py-1.5 text-[13.5px] font-medium text-cocoa-soft hover:-translate-y-0.5 hover:border-gold hover:text-gold-deep`}
-                >
-                  {c}
-                </span>
-              ))}
-            </div>
           </div>
 
           <div className="hero-in-delay relative mx-auto w-full max-w-[300px] sm:max-w-[340px]">
@@ -217,9 +205,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── গুণাগুণ — benefit pills around the jar, curved arrows (desktop);
-           stacked clean list on phone. Poster-style, Gheeya's own layout. ── */}
-      <section id="benefits" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-14 md:px-8 md:py-20">
+      {/* ── গুণাগুণ — image-led editorial list: jar photo + numbered
+           hairline rows. No card backgrounds anywhere in this section. ── */}
+      <section id="benefits" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-10 md:px-8">
         <div className="reveal text-center">
           <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
             {benefits.eyebrow}
@@ -232,75 +220,39 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="reveal relative mx-auto mt-10 max-w-5xl md:mt-12 md:h-[560px]">
-          {/* Curved arrows (desktop only) */}
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 1000 560"
-            className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
-          >
-            <defs>
-              <marker
-                id="benefit-arrow"
-                viewBox="0 0 10 10"
-                refX="8"
-                refY="5"
-                markerWidth="7"
-                markerHeight="7"
-                orient="auto-start-reverse"
-              >
-                <path d="M0 0L10 5L0 10z" fill="#a63a2e" />
-              </marker>
-            </defs>
-            <g stroke="#a63a2e" strokeWidth="2.5" fill="none" opacity="0.7" markerEnd="url(#benefit-arrow)">
-              <path d="M 258 55 C 320 90, 350 140, 385 190" />
-              <path d="M 258 260 C 320 262, 350 265, 382 270" />
-              <path d="M 258 460 C 320 420, 350 370, 385 330" />
-              <path d="M 742 147 C 680 172, 650 200, 618 224" />
-              <path d="M 742 371 C 680 352, 650 325, 618 300" />
-            </g>
-          </svg>
-
-          {/* Jar — centre on desktop, on top on phone */}
-          <div className="animate-float relative z-10 mx-auto w-[220px] overflow-hidden rounded-[24px] border border-line bg-cream shadow-[0_28px_56px_-20px_rgb(124_42_32/0.6)] md:absolute md:left-1/2 md:top-1/2 md:w-[240px] md:-translate-x-1/2 md:-translate-y-1/2">
+        <div className="mt-8 grid items-start gap-8 md:mt-10 md:grid-cols-[0.85fr_1.15fr] md:gap-14">
+          <div className="reveal overflow-hidden rounded-[24px] border border-line shadow-[0_28px_56px_-20px_rgb(124_42_32/0.6)]">
             <Image
               src="/ghee-jar-green.jpg"
               alt="Gheeya ঘি — জার"
               width={433}
               height={513}
-              className="aspect-[433/513] w-full object-cover"
+              className="aspect-[4/3] w-full object-cover object-[50%_30%] md:aspect-[3/4]"
             />
           </div>
-
-          {/* Benefit pills */}
-          <div className="mt-8 space-y-3 md:mt-0 md:space-y-0">
-            {benefits.items.map((b, i) => (
-              <div
+          <ul className="reveal">
+            {benefits.items.map((b) => (
+              <li
                 key={b.title}
-                className={`group flex items-center gap-3.5 rounded-[18px] border border-line bg-ivory px-4 py-3.5 shadow-[0_16px_32px_-16px_rgb(124_42_32/0.55)] ${fade} hover:-translate-y-1 hover:border-gold/60 hover:shadow-[0_22px_40px_-16px_rgb(124_42_32/0.65)] md:absolute md:w-[252px] ${
-                  [
-                    "md:left-0 md:top-[4%]",
-                    "md:left-0 md:top-[40%]",
-                    "md:left-0 md:top-[76%]",
-                    "md:right-0 md:top-[20%]",
-                    "md:right-0 md:top-[60%]",
-                  ][i]
-                }`}
+                className="group flex items-start gap-4 border-b border-line py-5 first:pt-0 last:border-b-0 md:py-6"
               >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold text-white transition-transform duration-300 group-hover:scale-110">
+                <span className="font-display text-[26px] font-bold leading-none text-gold/50 transition-colors duration-300 group-hover:text-gold">
+                  {b.no}
+                </span>
+                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gold/40 text-gold transition-transform duration-300 group-hover:scale-110">
                   {iconMap[b.icon]}
                 </span>
                 <span>
-                  <span className="block text-[15.5px] font-bold leading-snug text-cocoa">
+                  <span className="block text-[17px] font-bold leading-snug text-cocoa transition-transform duration-300 group-hover:translate-x-1">
                     {b.title}
                   </span>
-                  <span className="block text-[13.5px] leading-snug text-cocoa-faint">
+                  <span className="mt-0.5 block text-[14.5px] leading-snug text-cocoa-faint">
                     {b.text}
                   </span>
                 </span>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 
@@ -313,7 +265,7 @@ export default function Home() {
           fill
           className="photo-warm object-cover object-[80%_50%] opacity-[0.15]"
         />
-        <div className="relative mx-auto grid max-w-6xl gap-8 px-5 py-14 md:grid-cols-[1.1fr_0.9fr] md:px-8 md:py-20">
+        <div className="relative mx-auto grid max-w-6xl gap-8 px-5 py-10 md:grid-cols-[1.1fr_0.9fr] md:px-8">
           <div className="reveal">
             <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
               {intro.eyebrow}
@@ -339,7 +291,7 @@ export default function Home() {
       </section>
 
       {/* ── প্যাক নির্বাচন করুন — HoneyNest-type selector, Gheeya's own design ── */}
-      <section id="packs" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-14 md:px-8 md:py-20">
+      <section id="packs" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-10 md:px-8">
         <div className="reveal overflow-hidden rounded-[28px] border border-line bg-ivory shadow-[0_28px_56px_-20px_rgb(124_42_32/0.6)]">
           <div className="relative h-[230px] overflow-hidden bg-cream sm:h-[300px]">
             <Image
@@ -394,6 +346,18 @@ export default function Home() {
                     <span className="mt-1 block text-[13.5px] leading-snug text-cocoa-faint">
                       {p.note}
                     </span>
+                    {p.sale !== null && (
+                      <span className="mt-2 block">
+                        <span className="font-display text-[19px] font-bold text-gold">
+                          {bnPrice(p.sale)}
+                        </span>
+                        {p.regular !== null && (
+                          <span className="ml-2 text-[13.5px] text-cocoa-faint line-through">
+                            {bnPrice(p.regular)}
+                          </span>
+                        )}
+                      </span>
+                    )}
                   </button>
                 );
               })}
@@ -404,7 +368,24 @@ export default function Home() {
                 <p className="font-display text-[24px] font-bold leading-none text-cocoa">
                   {qty}টি × {pack}
                 </p>
-                <p className="mt-1.5 text-[14px] text-cocoa-faint">মূল্য কলের সময় জানানো হবে</p>
+                {selected.sale !== null ? (
+                  <p className="mt-1.5 text-[15px] font-semibold text-cocoa">
+                    মোট {bnPrice(selected.sale * qty)}
+                    {selected.regular !== null && (
+                      <>
+                        {" "}
+                        <span className="font-normal text-cocoa-faint line-through">
+                          {bnPrice(selected.regular * qty)}
+                        </span>
+                        <span className="ml-2 rounded-full bg-gold px-2.5 py-0.5 text-[12.5px] font-bold text-white">
+                          সাশ্রয় {bnPrice((selected.regular - selected.sale) * qty)}
+                        </span>
+                      </>
+                    )}
+                  </p>
+                ) : (
+                  <p className="mt-1.5 text-[14px] text-cocoa-faint">মূল্য কলের সময় জানানো হবে</p>
+                )}
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="mr-1 text-[14px] font-semibold text-cocoa">পরিমাণ</span>
@@ -461,7 +442,7 @@ export default function Home() {
           className="photo-warm object-cover object-[50%_30%]"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-cream/85 via-cream/60 to-cream/85" />
-        <div className="reveal relative mx-auto max-w-3xl px-5 py-16 text-center md:py-24">
+        <div className="reveal relative mx-auto max-w-3xl px-5 py-10 text-center">
           <p className="font-display text-[22px] font-medium italic text-gold-deep sm:text-[26px]">
             “{site.tagline}”
           </p>
@@ -480,7 +461,15 @@ export default function Home() {
             <div className="h-12 w-px bg-line" />
             <div className="text-left">
               <p className="font-display text-[18px] font-semibold text-cocoa">মূল্য</p>
-              <p className="text-[13.5px] leading-snug text-cocoa-faint">কলের সময় জানানো হবে</p>
+              {packs.items.every((p) => p.sale === null) ? (
+                <p className="text-[13.5px] leading-snug text-cocoa-faint">কলের সময় জানানো হবে</p>
+              ) : (
+                <p className="text-[13.5px] leading-snug text-cocoa-faint">
+                  {packs.items
+                    .map((p) => (p.sale !== null ? `${p.size} ${bnPrice(p.sale)}` : `${p.size} —`))
+                    .join(" · ")}
+                </p>
+              )}
             </div>
           </div>
           <div className="mt-8 flex flex-wrap justify-center gap-2">
@@ -497,7 +486,7 @@ export default function Home() {
       </section>
 
       {/* ── কেন Gheeya ── */}
-      <section id="why" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-14 md:px-8 md:py-20">
+      <section id="why" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-10 md:px-8">
         <div className="reveal text-center">
           <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
             {why.eyebrow}
@@ -523,7 +512,7 @@ export default function Home() {
       </section>
 
       {/* ── জিজ্ঞাসা ── */}
-      <section id="faq" className="mx-auto max-w-3xl scroll-mt-24 px-5 pb-14 md:px-8 md:pb-20">
+      <section id="faq" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-10 md:px-8">
         <div className="reveal text-center">
           <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
             জিজ্ঞাসা
@@ -584,7 +573,7 @@ export default function Home() {
           fill
           className="photo-warm object-cover object-[50%_20%] opacity-[0.14]"
         />
-        <div className="relative mx-auto max-w-2xl px-5 py-14 md:px-8 md:py-20">
+        <div className="relative mx-auto max-w-2xl px-5 py-10 md:px-8">
           <div className="reveal text-center">
             <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
               {order.eyebrow}
@@ -613,6 +602,11 @@ export default function Home() {
               <p className="mt-3 text-[14.5px] text-cocoa-faint">
                 {qty}টি × {pack} প্যাক
               </p>
+              {selected.sale !== null && (
+                <p className="mt-1 text-[15px] font-semibold text-gold">
+                  মোট {bnPrice(selected.sale * qty)}
+                </p>
+              )}
             </div>
           ) : (
             <form
@@ -637,9 +631,15 @@ export default function Home() {
                   <p className="mt-0.5 text-[14.5px] text-cocoa-soft">
                     {pack} প্যাক · {qty}টি
                   </p>
-                  <p className="mt-0.5 text-[13.5px] text-cocoa-faint">
-                    মূল্য কলের সময় জানানো হবে
-                  </p>
+                  {selected.sale !== null ? (
+                    <p className="mt-0.5 text-[13.5px] font-semibold text-gold">
+                      {bnPrice(selected.sale)} × {qty} = {bnPrice(selected.sale * qty)}
+                    </p>
+                  ) : (
+                    <p className="mt-0.5 text-[13.5px] text-cocoa-faint">
+                      মূল্য কলের সময় জানানো হবে
+                    </p>
+                  )}
                 </div>
                 <span className="ml-auto hidden rounded-full bg-gold px-3.5 py-1.5 text-[12.5px] font-semibold text-white sm:block">
                   ১০০% খাঁটি
@@ -741,6 +741,7 @@ export default function Home() {
                   className={`${fade} w-full rounded-full bg-gold py-4 text-[17px] font-semibold text-white hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_16px_32px_-12px_rgb(124_42_32/0.7)] active:scale-[0.98]`}
                 >
                   অর্ডার নিশ্চিত করুন — {qty}টি × {pack}
+                  {selected.sale !== null ? ` · মোট ${bnPrice(selected.sale * qty)}` : ""}
                 </button>
                 <p className="text-center text-[13.5px] leading-relaxed text-cocoa-faint">
                   ফর্মটি পূরণ করুন — আমরা কল করে মূল্য ও ডেলিভারি নিশ্চিত করব।
@@ -753,7 +754,7 @@ export default function Home() {
 
       {/* ── Footer ── */}
       <footer className="bg-cocoa text-ivory">
-        <div className="mx-auto max-w-6xl px-5 py-12 md:px-8">
+        <div className="mx-auto max-w-6xl px-5 py-10 md:px-8">
           <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
             <div>
               <p className="font-display text-[24px] font-bold">Gheeya <span className="text-[15px] text-butter">ঘি</span></p>
