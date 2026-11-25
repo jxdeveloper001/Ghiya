@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { benefits, faqs, hero, intro, order, packs, showcase, site, why } from "@/data/site";
 
 const fade = "transition-all duration-300 ease-out";
@@ -48,6 +48,19 @@ export default function Home() {
   const [address, setAddress] = useState("");
   const [done, setDone] = useState(false);
   const [orderId, setOrderId] = useState("");
+  const faqRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const [faqHeights, setFaqHeights] = useState<number[]>([]);
+
+  // Measure each FAQ answer once so open/close animates smoothly
+  // (max-height) instead of vanishing in one frame.
+  useEffect(() => {
+    const measure = () =>
+      setFaqHeights(faqRefs.current.map((el) => el?.scrollHeight ?? 0));
+    measure();
+    window.addEventListener("resize", measure);
+    document.fonts?.ready.then(measure).catch(() => {});
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   const selected = packs.items.find((p) => p.size === pack) ?? packs.items[1];
 
@@ -95,7 +108,7 @@ export default function Home() {
           </nav>
           <a
             href="#order"
-            className={`${fade} rounded-full bg-cocoa px-5 py-2.5 text-[15px] font-semibold text-ivory hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_10px_20px_-8px_rgb(154_52_18/0.6)] active:scale-95`}
+            className={`${fade} rounded-full bg-cocoa px-5 py-2.5 text-[15px] font-semibold text-ivory hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_10px_20px_-8px_rgb(124_42_32/0.6)] active:scale-95`}
           >
             অর্ডার করুন
           </a>
@@ -160,7 +173,7 @@ export default function Home() {
             <div className="mt-6 flex flex-wrap gap-3">
               <a
                 href="#order"
-                className={`${fade} rounded-full bg-gold px-7 py-3.5 text-[16px] font-semibold text-white hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_14px_28px_-10px_rgb(154_52_18/0.7)] active:scale-95`}
+                className={`${fade} rounded-full bg-gold px-7 py-3.5 text-[16px] font-semibold text-white hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_14px_28px_-10px_rgb(124_42_32/0.7)] active:scale-95`}
               >
                 {hero.primaryCta}
               </a>
@@ -184,7 +197,7 @@ export default function Home() {
           </div>
 
           <div className="hero-in-delay relative mx-auto w-full max-w-[300px] sm:max-w-[340px]">
-            <div className="animate-float relative overflow-hidden rounded-t-[170px] rounded-b-[28px] border border-line bg-cream shadow-[0_30px_60px_-24px_rgb(154_52_18/0.45)]">
+            <div className="animate-float relative overflow-hidden rounded-t-[170px] rounded-b-[28px] border border-line bg-cream shadow-[0_30px_60px_-20px_rgb(124_42_32/0.6)]">
               <Image
                 src="/ghee-jar-warm.jpg"
                 alt="Gheeya ঘি — কাচের জার"
@@ -194,57 +207,99 @@ export default function Home() {
                 className="aspect-[3/3.6] w-full object-cover object-[50%_28%]"
               />
             </div>
-            <div className="absolute -left-3 top-12 rounded-full bg-ivory px-4 py-2 text-[14px] font-semibold text-cocoa shadow-[0_10px_24px_-8px_rgb(67_20_7/0.35)] sm:-left-6">
+            <div className="absolute -left-3 top-12 rounded-full bg-ivory px-4 py-2 text-[14px] font-semibold text-cocoa shadow-[0_10px_24px_-8px_rgb(58_19_12/0.35)] sm:-left-6">
               ১০০ গ্রাম · ৩০০ গ্রাম
             </div>
-            <div className="absolute -bottom-3 right-2 rounded-full bg-cocoa px-4 py-2 text-[14px] font-semibold text-ivory shadow-[0_10px_24px_-8px_rgb(67_20_7/0.45)] sm:right-4">
+            <div className="absolute -bottom-3 right-2 rounded-full bg-cocoa px-4 py-2 text-[14px] font-semibold text-ivory shadow-[0_10px_24px_-8px_rgb(58_19_12/0.45)] sm:right-4">
               ধীরে জ্বাল দেওয়া
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── গুণাগুণ — Chebe-style: jar on a circle + short rows ── */}
+      {/* ── গুণাগুণ — benefit pills around the jar, curved arrows (desktop);
+           stacked clean list on phone. Poster-style, Gheeya's own layout. ── */}
       <section id="benefits" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-14 md:px-8 md:py-20">
-        <div className="grid items-center gap-10 md:grid-cols-[0.9fr_1.1fr] md:gap-14">
-          <div className="reveal relative mx-auto flex w-full max-w-[340px] items-center justify-center">
-            <div className="absolute h-[300px] w-[300px] rounded-full bg-butter/70 sm:h-[360px] sm:w-[360px]" />
-            <div className="relative w-[210px] overflow-hidden rounded-[24px] shadow-[0_24px_48px_-20px_rgb(154_52_18/0.5)] sm:w-[240px]">
-              <Image
-                src="/ghee-jar-green.jpg"
-                alt="Gheeya ঘি — জার"
-                width={433}
-                height={513}
-                className="aspect-[433/513] w-full object-cover"
-              />
-            </div>
+        <div className="reveal text-center">
+          <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
+            {benefits.eyebrow}
+          </p>
+          <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
+            {benefits.heading}
+          </h2>
+          <p className="mx-auto mt-3 max-w-lg text-[16.5px] leading-relaxed text-cocoa-soft">
+            {benefits.subtext}
+          </p>
+        </div>
+
+        <div className="reveal relative mx-auto mt-10 max-w-5xl md:mt-12 md:h-[560px]">
+          {/* Curved arrows (desktop only) */}
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 1000 560"
+            className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
+          >
+            <defs>
+              <marker
+                id="benefit-arrow"
+                viewBox="0 0 10 10"
+                refX="8"
+                refY="5"
+                markerWidth="7"
+                markerHeight="7"
+                orient="auto-start-reverse"
+              >
+                <path d="M0 0L10 5L0 10z" fill="#a63a2e" />
+              </marker>
+            </defs>
+            <g stroke="#a63a2e" strokeWidth="2.5" fill="none" opacity="0.7" markerEnd="url(#benefit-arrow)">
+              <path d="M 258 55 C 320 90, 350 140, 385 190" />
+              <path d="M 258 260 C 320 262, 350 265, 382 270" />
+              <path d="M 258 460 C 320 420, 350 370, 385 330" />
+              <path d="M 742 147 C 680 172, 650 200, 618 224" />
+              <path d="M 742 371 C 680 352, 650 325, 618 300" />
+            </g>
+          </svg>
+
+          {/* Jar — centre on desktop, on top on phone */}
+          <div className="animate-float relative z-10 mx-auto w-[220px] overflow-hidden rounded-[24px] border border-line bg-cream shadow-[0_28px_56px_-20px_rgb(124_42_32/0.6)] md:absolute md:left-1/2 md:top-1/2 md:w-[240px] md:-translate-x-1/2 md:-translate-y-1/2">
+            <Image
+              src="/ghee-jar-green.jpg"
+              alt="Gheeya ঘি — জার"
+              width={433}
+              height={513}
+              className="aspect-[433/513] w-full object-cover"
+            />
           </div>
-          <div className="reveal">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
-              {benefits.eyebrow}
-            </p>
-            <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
-              {benefits.heading}
-            </h2>
-            <p className="mt-3 max-w-lg text-[16.5px] leading-relaxed text-cocoa-soft">
-              {benefits.subtext}
-            </p>
-            <ul className="mt-7 space-y-2">
-              {benefits.items.map((b) => (
-                <li
-                  key={b.title}
-                  className={`group flex items-center gap-3.5 rounded-2xl border border-transparent px-3 py-2.5 ${fade} hover:translate-x-1.5 hover:border-line hover:bg-ivory/80`}
-                >
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-cream-deep/70 text-gold-deep transition-transform duration-300 group-hover:scale-110 group-hover:bg-butter/60">
-                    {iconMap[b.icon]}
+
+          {/* Benefit pills */}
+          <div className="mt-8 space-y-3 md:mt-0 md:space-y-0">
+            {benefits.items.map((b, i) => (
+              <div
+                key={b.title}
+                className={`group flex items-center gap-3.5 rounded-[18px] border border-line bg-ivory px-4 py-3.5 shadow-[0_16px_32px_-16px_rgb(124_42_32/0.55)] ${fade} hover:-translate-y-1 hover:border-gold/60 hover:shadow-[0_22px_40px_-16px_rgb(124_42_32/0.65)] md:absolute md:w-[252px] ${
+                  [
+                    "md:left-0 md:top-[4%]",
+                    "md:left-0 md:top-[40%]",
+                    "md:left-0 md:top-[76%]",
+                    "md:right-0 md:top-[20%]",
+                    "md:right-0 md:top-[60%]",
+                  ][i]
+                }`}
+              >
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold text-white transition-transform duration-300 group-hover:scale-110">
+                  {iconMap[b.icon]}
+                </span>
+                <span>
+                  <span className="block text-[15.5px] font-bold leading-snug text-cocoa">
+                    {b.title}
                   </span>
-                  <div>
-                    <p className="text-[16.5px] font-semibold leading-snug text-cocoa">{b.title}</p>
-                    <p className="text-[14.5px] leading-snug text-cocoa-faint">{b.text}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
+                  <span className="block text-[13.5px] leading-snug text-cocoa-faint">
+                    {b.text}
+                  </span>
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -285,7 +340,7 @@ export default function Home() {
 
       {/* ── প্যাক নির্বাচন করুন — HoneyNest-type selector, Gheeya's own design ── */}
       <section id="packs" className="mx-auto max-w-3xl scroll-mt-24 px-5 py-14 md:px-8 md:py-20">
-        <div className="reveal overflow-hidden rounded-[28px] border border-line bg-ivory shadow-[0_24px_48px_-24px_rgb(154_52_18/0.45)]">
+        <div className="reveal overflow-hidden rounded-[28px] border border-line bg-ivory shadow-[0_28px_56px_-20px_rgb(124_42_32/0.6)]">
           <div className="relative h-[230px] overflow-hidden bg-cream sm:h-[300px]">
             <Image
               key={pack}
@@ -322,7 +377,7 @@ export default function Home() {
                     aria-pressed={active}
                     className={`relative rounded-[18px] border-2 p-4 text-left ${fade} hover:-translate-y-0.5 active:scale-[0.98] ${
                       active
-                        ? "border-gold bg-butter/25 shadow-[0_10px_24px_-12px_rgb(194_65_12/0.6)]"
+                        ? "border-gold bg-butter/25 shadow-[0_10px_24px_-12px_rgb(166_58_46/0.6)]"
                         : "border-line bg-white hover:border-gold/60"
                     }`}
                   >
@@ -388,7 +443,7 @@ export default function Home() {
 
             <a
               href="#order"
-              className={`${fade} mt-6 block rounded-full bg-gold py-4 text-center text-[17px] font-semibold text-white hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_16px_32px_-12px_rgb(154_52_18/0.7)] active:scale-[0.98]`}
+              className={`${fade} mt-6 block rounded-full bg-gold py-4 text-center text-[17px] font-semibold text-white hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_16px_32px_-12px_rgb(124_42_32/0.7)] active:scale-[0.98]`}
             >
               অর্ডার করুন — {pack}
             </a>
@@ -417,7 +472,7 @@ export default function Home() {
             {showcase.heading}
           </h2>
           <p className="mx-auto mt-3 max-w-md text-[17px] text-cocoa-soft">{showcase.text}</p>
-          <div className="mx-auto mt-8 flex max-w-md items-center justify-center gap-6 rounded-[20px] border border-line bg-ivory px-6 py-5 shadow-[0_18px_40px_-20px_rgb(154_52_18/0.4)]">
+          <div className="mx-auto mt-8 flex max-w-md items-center justify-center gap-6 rounded-[20px] border border-line bg-ivory px-6 py-5 shadow-[0_18px_40px_-20px_rgb(124_42_32/0.4)]">
             <div className="text-left">
               <p className="font-display text-[26px] font-bold text-cocoa">{showcase.size}</p>
               <p className="text-[13.5px] text-cocoa-faint">{showcase.sizeNote}</p>
@@ -484,7 +539,7 @@ export default function Home() {
               <div
                 key={f.q}
                 className={`reveal overflow-hidden rounded-[20px] border bg-ivory ${fade} ${
-                  open ? "border-gold/60 shadow-[0_14px_32px_-18px_rgb(154_52_18/0.5)]" : "border-line"
+                  open ? "border-gold/60 shadow-[0_14px_32px_-18px_rgb(124_42_32/0.5)]" : "border-line"
                 }`}
               >
                 <button
@@ -502,8 +557,15 @@ export default function Home() {
                     +
                   </span>
                 </button>
-                <div className={`faq-panel ${open ? "open" : ""}`}>
-                  <div>
+                <div
+                  style={{ maxHeight: open ? `${faqHeights[i] ?? 0}px` : "0px" }}
+                  className="overflow-hidden transition-[max-height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                >
+                  <div
+                    ref={(el) => {
+                      faqRefs.current[i] = el;
+                    }}
+                  >
                     <p className="px-6 pb-5 text-[15.5px] leading-relaxed text-cocoa-soft">{f.a}</p>
                   </div>
                 </div>
@@ -536,7 +598,7 @@ export default function Home() {
           </div>
 
           {done ? (
-            <div className="reveal anim-swap mt-8 rounded-[24px] border border-gold/40 bg-ivory p-8 text-center shadow-[0_24px_48px_-24px_rgb(154_52_18/0.5)]">
+            <div className="reveal anim-swap mt-8 rounded-[24px] border border-gold/40 bg-ivory p-8 text-center shadow-[0_24px_48px_-24px_rgb(124_42_32/0.5)]">
               <p className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gold text-[26px] text-white">
                 ✓
               </p>
@@ -555,7 +617,7 @@ export default function Home() {
           ) : (
             <form
               onSubmit={submit}
-              className="reveal mt-8 overflow-hidden rounded-[24px] border border-line bg-ivory shadow-[0_24px_48px_-24px_rgb(154_52_18/0.45)]"
+              className="reveal mt-8 overflow-hidden rounded-[24px] border border-line bg-ivory shadow-[0_28px_56px_-20px_rgb(124_42_32/0.6)]"
             >
               {/* Product being bought */}
               <div className="flex items-center gap-4 border-b border-line bg-cream/60 p-5">
@@ -625,7 +687,7 @@ export default function Home() {
                         aria-pressed={pack === p.size}
                         className={`rounded-[14px] border px-4 py-3 text-[16px] font-semibold ${fade} hover:-translate-y-0.5 active:scale-[0.98] ${
                           pack === p.size
-                            ? "border-gold bg-butter/30 text-cocoa shadow-[0_8px_20px_-10px_rgb(194_65_12/0.6)]"
+                            ? "border-gold bg-butter/30 text-cocoa shadow-[0_8px_20px_-10px_rgb(166_58_46/0.6)]"
                             : "border-line bg-white text-cocoa-soft hover:border-gold/60"
                         }`}
                       >
@@ -676,7 +738,7 @@ export default function Home() {
                 </div>
                 <button
                   type="submit"
-                  className={`${fade} w-full rounded-full bg-gold py-4 text-[17px] font-semibold text-white hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_16px_32px_-12px_rgb(154_52_18/0.7)] active:scale-[0.98]`}
+                  className={`${fade} w-full rounded-full bg-gold py-4 text-[17px] font-semibold text-white hover:-translate-y-0.5 hover:bg-gold-deep hover:shadow-[0_16px_32px_-12px_rgb(124_42_32/0.7)] active:scale-[0.98]`}
                 >
                   অর্ডার নিশ্চিত করুন — {qty}টি × {pack}
                 </button>

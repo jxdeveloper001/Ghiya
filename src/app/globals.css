@@ -3,17 +3,17 @@
 @theme {
   --font-display: "Noto Serif Bengali", "Hind Siliguri", Georgia, serif;
   --font-sans: "Hind Siliguri", "Noto Sans Bengali", ui-sans-serif, system-ui, sans-serif;
-  /* Light yellow + dark orange theme */
+  /* Cream base + light maroon accent, dark shadows */
   --color-ivory: #fffbeb;
   --color-cream: #fef3c7;
   --color-cream-deep: #fde68a;
   --color-butter: #fbbf24;
-  --color-gold: #c2410c;
-  --color-gold-deep: #9a3412;
-  --color-gold-soft: #f59e0b;
-  --color-cocoa: #431407;
-  --color-cocoa-soft: #7c2d12;
-  --color-cocoa-faint: #9a6b3f;
+  --color-gold: #a63a2e;
+  --color-gold-deep: #7c2a20;
+  --color-gold-soft: #c97b5a;
+  --color-cocoa: #3a130c;
+  --color-cocoa-soft: #6b2a1e;
+  --color-cocoa-faint: #96604f;
   --color-olive: #6f6b3f;
   --color-line: #f0d9a0;
 }
@@ -121,8 +121,8 @@ h1, h2, h3 {
 .lift:hover {
   transform: translateY(-4px);
   box-shadow:
-    0 14px 32px -14px rgb(154 52 18 / 0.35),
-    0 4px 12px -4px rgb(67 20 7 / 0.08);
+    0 20px 40px -14px rgb(124 42 32 / 0.5),
+    0 6px 16px -6px rgb(58 19 12 / 0.18);
 }
 
 @media (prefers-reduced-motion: reduce) {
