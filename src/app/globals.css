@@ -23,6 +23,13 @@ html {
 
 body {
   background-color: #fdf9ef;
+  /* Warm blurred ghee tones as the theme background, veiled in ivory */
+  background-image:
+    linear-gradient(rgb(253 249 239 / 0.9), rgb(253 249 239 / 0.9)),
+    url("/bg-gold-blur.jpg");
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
   color: #3a2a18;
   font-family: var(--font-sans);
   overflow-x: clip;
