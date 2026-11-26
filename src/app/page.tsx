@@ -363,22 +363,24 @@ export default function Home() {
               {hero.subtext}
             </p>
           </div>
-          {/* Jar — no box, no frame: just the picture, feathered into
-              the background, a little bigger */}
-          <div className="hero-in-delay animate-float mt-9 w-[340px] sm:w-[520px]">
+          {/* Jar — transparent cutout: no white halo on top, the
+              white light sits only underneath, in the background */}
+          <div className="hero-in-delay animate-float relative mt-9 w-[300px] sm:w-[420px]">
+            <div
+              aria-hidden
+              className="absolute -bottom-4 left-1/2 h-[110px] w-[280px] -translate-x-1/2 rounded-[100%] bg-white/40 blur-2xl sm:w-[400px]"
+            />
             <Image
-              src="/ghee-jar-tight.jpg"
+              src="/ghee-jar-tight.webp"
               alt={hero.jarAlt}
               width={1136}
               height={1136}
               priority
-              className="img-feather aspect-square w-full object-cover"
+              className="relative aspect-square w-full object-cover"
             />
           </div>
           <p className="hero-in-delay mt-7 text-[16px] font-semibold text-cocoa">
-            {packs.items
-              .map((p) => (p.sale !== null ? `${p.size} ${bnPrice(p.sale)}` : p.size))
-              .join(" · ")}
+            {packs.items.map((p) => p.size).join(" · ")}
           </p>
           <a
             href="#order"
@@ -589,44 +591,20 @@ export default function Home() {
       {/* ── রিভিউ — auto right-to-left infinite slider + prev/next buttons ── */}
       <section id="reviews" className="scroll-mt-24 bg-cream-deep/60 py-[100px]">
         <div className="mx-auto max-w-6xl px-5 md:px-8">
-        <div className="reveal flex flex-wrap items-end justify-between gap-5">
-          <div className="text-center md:text-left">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
-              {reviews.eyebrow}
-            </p>
-            <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
-              {reviews.heading}
-            </h2>
-            <p className="mx-auto mt-3 max-w-md text-[15.5px] leading-relaxed text-cocoa-faint md:mx-0">
-              {reviews.subtext}
-            </p>
-          </div>
-          <div className="mx-auto flex gap-3 md:mx-0">
-            <button
-              type="button"
-              onClick={revPrev}
-              aria-label="আগের রিভিউ"
-              className={`${fade} flex h-12 w-12 items-center justify-center rounded-full border border-line bg-ivory text-gold-deep shadow-[0_10px_20px_-10px_rgb(138_94_0/0.5)] hover:-translate-y-0.5 hover:border-gold hover:bg-gold hover:text-white active:scale-95`}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M15 5l-7 7 7 7" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              onClick={revNext}
-              aria-label="পরের রিভিউ"
-              className={`${fade} flex h-12 w-12 items-center justify-center rounded-full border border-line bg-ivory text-gold-deep shadow-[0_10px_20px_-10px_rgb(138_94_0/0.5)] hover:-translate-y-0.5 hover:border-gold hover:bg-gold hover:text-white active:scale-95`}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
+        <div className="reveal text-center md:text-left">
+          <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
+            {reviews.eyebrow}
+          </p>
+          <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
+            {reviews.heading}
+          </h2>
+          <p className="mx-auto mt-3 max-w-md text-[15.5px] leading-relaxed text-cocoa-faint md:mx-0">
+            {reviews.subtext}
+          </p>
         </div>
 
         <div
-          className="reveal mt-8 overflow-hidden md:mt-10"
+          className="reveal relative mt-8 overflow-hidden md:mt-10"
           onMouseEnter={() => setRevPaused(true)}
           onMouseLeave={() => setRevPaused(false)}
         >
@@ -661,6 +639,32 @@ export default function Home() {
                 </figcaption>
               </figure>
             ))}
+          </div>
+          {/* Left edge — hover here and the prev button appears */}
+          <div className="absolute inset-y-0 left-0 z-10 flex w-16 items-center justify-start pl-2 opacity-100 transition-opacity duration-300 md:opacity-0 md:hover:opacity-100">
+            <button
+              type="button"
+              onClick={revPrev}
+              aria-label="আগের রিভিউ"
+              className={`${fade} flex h-12 w-12 items-center justify-center rounded-full border border-line bg-ivory text-gold-deep shadow-[0_10px_20px_-10px_rgb(138_94_0/0.5)] hover:border-gold hover:bg-gold hover:text-white active:scale-95`}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M15 5l-7 7 7 7" />
+              </svg>
+            </button>
+          </div>
+          {/* Right edge — hover here and the next button appears */}
+          <div className="absolute inset-y-0 right-0 z-10 flex w-16 items-center justify-end pr-2 opacity-100 transition-opacity duration-300 md:opacity-0 md:hover:opacity-100">
+            <button
+              type="button"
+              onClick={revNext}
+              aria-label="পরের রিভিউ"
+              className={`${fade} flex h-12 w-12 items-center justify-center rounded-full border border-line bg-ivory text-gold-deep shadow-[0_10px_20px_-10px_rgb(138_94_0/0.5)] hover:border-gold hover:bg-gold hover:text-white active:scale-95`}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
         </div>
         </div>
@@ -706,7 +710,7 @@ export default function Home() {
           ) : (
             <form
               onSubmit={submit}
-              className="reveal mt-8 overflow-hidden rounded-[24px] border border-line bg-ivory shadow-[0_28px_56px_-20px_rgb(138_94_0/0.6)]"
+              className="mt-8 overflow-hidden rounded-[24px] border border-line bg-ivory shadow-[0_28px_56px_-20px_rgb(138_94_0/0.6)]"
             >
               {/* Product being bought */}
               <div className="flex items-center gap-4 border-b border-line bg-cream/60 p-5">
