@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Noto Serif Bengali", "Hind Siliguri", Georgia, serif;
+  --font-display: "Anek Bangla", "Hind Siliguri", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Hind Siliguri", "Noto Sans Bengali", ui-sans-serif, system-ui, sans-serif;
   /* Dark yellow + cream theme (sampled from the hero background
      image: dark yellow #b67c02, cream #f0e2bb) */

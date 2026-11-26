@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Hind_Siliguri, Noto_Serif_Bengali } from "next/font/google";
+import { Anek_Bangla, Hind_Siliguri } from "next/font/google";
 import "./globals.css";
 
-const serifBn = Noto_Serif_Bengali({
-  variable: "--font-serif-bn",
+const displayBn = Anek_Bangla({
+  variable: "--font-display-bn",
   subsets: ["bengali", "latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["600", "700", "800"],
 });
 
 const sansBn = Hind_Siliguri({
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="bn" className={`${serifBn.variable} ${sansBn.variable}`}>
+    <html lang="bn" className={`${displayBn.variable} ${sansBn.variable}`}>
       <body className="min-h-screen bg-ivory font-sans text-cocoa antialiased">
         {children}
       </body>

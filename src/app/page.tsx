@@ -327,7 +327,7 @@ export default function Home() {
            background, minimal text on the yellow, jar in the middle ── */}
       <section className="relative overflow-hidden">
         <Image
-          src="/bg-yellow.jpg"
+          src="/hero-bg-gold.jpg"
           alt=""
           aria-hidden="true"
           fill
@@ -350,7 +350,7 @@ export default function Home() {
           </div>
           {/* Jar — no box, no frame: just the picture, feathered into
               the background, a little bigger */}
-          <div className="hero-in-delay animate-float mt-9 w-[300px] sm:w-[380px]">
+          <div className="hero-in-delay animate-float mt-9 w-[320px] sm:w-[440px]">
             <Image
               src="/ghee-jar.jpg"
               alt={hero.jarAlt}
@@ -375,58 +375,70 @@ export default function Home() {
       </section>
 
       {/* ── গুণাগুণ — reference style: jar in the middle,
-           2 features each side ── */}
-      <section id="benefits" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-[60px] md:px-8">
-        <div className="reveal text-center">
-          <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
-            {benefits.eyebrow}
-          </p>
-          <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
-            {benefits.heading}
-          </h2>
-          <p className="mx-auto mt-3 max-w-lg text-[16.5px] leading-relaxed text-cocoa-soft">
-            {benefits.subtext}
-          </p>
+           2 features each side; background = the open-jar photo,
+           heavily blurred inside the cream colour ── */}
+      <section id="benefits" className="relative scroll-mt-24 overflow-hidden py-[60px]">
+        <div aria-hidden className="absolute inset-0">
+          <Image
+            src="/benefits-bg.jpg"
+            alt=""
+            fill
+            className="scale-125 object-cover blur-3xl"
+          />
+          <div className="absolute inset-0 bg-cream/55" />
         </div>
-        <div className="reveal mx-auto mt-10 grid max-w-5xl items-center gap-10 md:mt-12 md:grid-cols-[1fr_240px_1fr] md:gap-8">
-          <div className="order-2 space-y-8 md:order-1">
-            {benefits.items.slice(0, 2).map((b) => (
-              <div key={b.title} className="text-center md:text-right">
-                <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-gold/12 text-gold md:ml-auto md:mr-0">
-                  {iconMap[b.icon]}
-                </span>
-                <h3 className="mt-3 font-display text-[19px] font-bold leading-snug text-cocoa">
-                  {b.title}
-                </h3>
-                <p className="mt-1 text-[14.5px] leading-relaxed text-cocoa-soft">
-                  {b.text}
-                </p>
-              </div>
-            ))}
+        <div className="relative mx-auto max-w-6xl px-5 md:px-8">
+          <div className="reveal text-center">
+            <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
+              {benefits.eyebrow}
+            </p>
+            <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
+              {benefits.heading}
+            </h2>
+            <p className="mx-auto mt-3 max-w-lg text-[16.5px] leading-relaxed text-cocoa-soft">
+              {benefits.subtext}
+            </p>
           </div>
-          <div className="animate-float order-1 mx-auto w-[210px] md:order-2 md:w-[240px]">
-            <Image
-              src="/ghee-jar.jpg"
-              alt="Gheeya ঘি — জার"
-              width={1200}
-              height={1200}
-              className="img-feather aspect-square w-full object-contain"
-            />
-          </div>
-          <div className="order-3 space-y-8">
-            {benefits.items.slice(2, 4).map((b) => (
-              <div key={b.title} className="text-center md:text-left">
-                <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-gold/12 text-gold md:mr-auto md:ml-0">
-                  {iconMap[b.icon]}
-                </span>
-                <h3 className="mt-3 font-display text-[19px] font-bold leading-snug text-cocoa">
-                  {b.title}
-                </h3>
-                <p className="mt-1 text-[14.5px] leading-relaxed text-cocoa-soft">
-                  {b.text}
-                </p>
-              </div>
-            ))}
+          <div className="reveal mx-auto mt-10 grid max-w-5xl items-center gap-10 md:mt-12 md:grid-cols-[1fr_240px_1fr] md:gap-8">
+            <div className="order-2 space-y-8 md:order-1">
+              {benefits.items.slice(0, 2).map((b) => (
+                <div key={b.title} className="text-center md:text-right">
+                  <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-gold/12 text-gold md:ml-auto md:mr-0">
+                    {iconMap[b.icon]}
+                  </span>
+                  <h3 className="mt-3 font-display text-[19px] font-bold leading-snug text-cocoa">
+                    {b.title}
+                  </h3>
+                  <p className="mt-1 text-[14.5px] leading-relaxed text-cocoa-soft">
+                    {b.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <div className="animate-float order-1 mx-auto w-[210px] md:order-2 md:w-[240px]">
+              <Image
+                src="/ghee-jar.jpg"
+                alt="Gheeya ঘি — জার"
+                width={1200}
+                height={1200}
+                className="img-feather aspect-square w-full object-contain"
+              />
+            </div>
+            <div className="order-3 space-y-8">
+              {benefits.items.slice(2, 4).map((b) => (
+                <div key={b.title} className="text-center md:text-left">
+                  <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-gold/12 text-gold md:mr-auto md:ml-0">
+                    {iconMap[b.icon]}
+                  </span>
+                  <h3 className="mt-3 font-display text-[19px] font-bold leading-snug text-cocoa">
+                    {b.title}
+                  </h3>
+                  <p className="mt-1 text-[14.5px] leading-relaxed text-cocoa-soft">
+                    {b.text}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -457,126 +469,139 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Gheeya product — 4 sticker variants; click a card to expand
-           size + price below it, then order ── */}
-      <section id="products" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-[60px] md:px-8">
-        <div className="reveal text-center">
-          <h2 className="font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
-            Gheeya product
-          </h2>
-          <p className="mx-auto mt-3 max-w-md text-[16px] leading-relaxed text-cocoa-soft">
-            স্বাদ একই — শুধু স্টিকারের রং আলাদা।
-          </p>
-        </div>
-        <div className="mt-10 grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {variants.map((v, i) => {
-            const open = selectedVariant === i;
-            return (
-              <article
-                key={v.name}
-                className={`reveal overflow-hidden rounded-[20px] border bg-ivory ${fade} ${
-                  open
-                    ? "border-gold/60 shadow-[0_18px_36px_-20px_rgb(138_94_0/0.5)]"
-                    : "border-line"
-                }`}
-              >
-                <button
-                  type="button"
-                  onClick={() => setSelectedVariant(open ? null : i)}
-                  aria-expanded={open}
-                  className="block w-full text-left"
+      {/* ── Gheeya product — cloned from the reference: pale blush
+           section, white cards, product centred, name / price /
+           stars centred, click a card to expand size + price ── */}
+      <section id="products" className="scroll-mt-24 bg-[#f9f4f0] py-[60px]">
+        <div className="mx-auto max-w-6xl px-5 md:px-8">
+          <div className="reveal text-center">
+            <h2 className="font-display text-[30px] font-bold text-cocoa sm:text-[38px]">
+              Gheeya product
+            </h2>
+            <p className="mx-auto mt-3 max-w-md text-[16px] leading-relaxed text-cocoa-soft">
+              স্বাদ একই — শুধু স্টিকারের রং আলাদা।
+            </p>
+          </div>
+          <div className="mt-10 grid grid-cols-1 items-start gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {variants.map((v, i) => {
+              const open = selectedVariant === i;
+              return (
+                <article
+                  key={v.name}
+                  className={`reveal overflow-hidden rounded-[16px] bg-white ${fade} ${
+                    open
+                      ? "border border-gold/60 shadow-[0_18px_36px_-20px_rgb(138_94_0/0.5)]"
+                      : "border border-transparent shadow-[0_10px_28px_-20px_rgb(58_36_5/0.35)]"
+                  }`}
                 >
-                  <Image
-                    src={v.img}
-                    alt={v.alt}
-                    width={1200}
-                    height={1200}
-                    className="aspect-square w-full object-cover transition-transform duration-500 hover:scale-[1.03]"
-                  />
-                  <span className="flex items-start justify-between gap-2 p-5">
-                    <span>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedVariant(open ? null : i)}
+                    aria-expanded={open}
+                    className="block w-full text-center"
+                  >
+                    <span className="block p-4 pb-0">
+                      <Image
+                        src={v.img}
+                        alt={v.alt}
+                        width={1200}
+                        height={1200}
+                        className="aspect-square w-full rounded-[12px] object-cover"
+                      />
+                    </span>
+                    <span className="block px-5 pb-5 pt-4">
                       <span className="block font-display text-[19px] font-bold leading-snug text-cocoa">
                         {v.name}
                       </span>
-                      <span className="mt-0.5 block text-[14px] text-cocoa-soft">
-                        {fromPrice !== null
-                          ? `${bnPrice(fromPrice)} থেকে`
-                          : "মূল্য কলের সময় জানানো হবে"}
+                      <span className="mt-1.5 block leading-none">
+                        {fromPrice !== null && (
+                          <span className="font-display text-[16px] font-bold text-gold-deep">
+                            {bnPrice(fromPrice)}
+                          </span>
+                        )}
+                        {packs.items[0].regular !== null && (
+                          <span className="ml-2 text-[13px] text-cocoa-faint line-through">
+                            {bnPrice(packs.items[0].regular)}
+                          </span>
+                        )}
+                      </span>
+                      <span className="mt-1.5 block text-[13px] leading-none tracking-[0.2em] text-gold">
+                        ★★★★★
+                      </span>
+                      <span
+                        className={`mx-auto mt-3.5 flex h-9 w-9 items-center justify-center rounded-full border text-[18px] leading-none transition-all duration-300 ${
+                          open
+                            ? "rotate-45 border-gold bg-gold text-white"
+                            : "border-line text-cocoa-soft"
+                        }`}
+                      >
+                        +
                       </span>
                     </span>
-                    <span
-                      className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-[18px] leading-none transition-all duration-300 ${
-                        open
-                          ? "rotate-45 border-gold bg-gold text-white"
-                          : "border-line text-cocoa-soft"
-                      }`}
-                    >
-                      +
-                    </span>
-                  </span>
-                </button>
-                <div
-                  style={{ maxHeight: open ? `${panelHeights[i] ?? 0}px` : "0px" }}
-                  className="overflow-hidden transition-[max-height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
-                >
+                  </button>
                   <div
-                    ref={(el) => {
-                      panelRefs.current[i] = el;
-                    }}
-                    className="border-t border-line/70 px-5 pb-5 pt-4"
+                    style={{ maxHeight: open ? `${panelHeights[i] ?? 0}px` : "0px" }}
+                    className="overflow-hidden transition-[max-height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
                   >
-                    <p className="text-[14px] font-semibold text-cocoa">প্যাক বেছে নিন:</p>
-                    <div className="mt-2.5 grid grid-cols-2 gap-2">
-                      {packs.items.map((p) => {
-                        const active = pack === p.size;
-                        return (
-                          <button
-                            key={p.size}
-                            type="button"
-                            onClick={() => setPack(p.size)}
-                            aria-pressed={active}
-                            className={`rounded-[14px] border px-3 py-3 text-center ${fade} active:scale-[0.98] ${
-                              active
-                                ? "border-gold bg-butter/25"
-                                : "border-line bg-white hover:border-gold/60"
-                            }`}
-                          >
-                            <span className="block text-[15px] font-semibold leading-none text-cocoa">
-                              {p.size}
-                            </span>
-                            {p.sale !== null && (
-                              <span className="mt-1.5 block leading-none">
-                                <span className="font-display text-[16px] font-bold text-gold">
-                                  {bnPrice(p.sale)}
-                                </span>
-                                {p.regular !== null && (
-                                  <span className="ml-1.5 text-[12px] text-cocoa-faint line-through">
-                                    {bnPrice(p.regular)}
-                                  </span>
-                                )}
-                              </span>
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setVariant(i);
-                        document
-                          .querySelector("#order")
-                          ?.scrollIntoView({ behavior: "smooth" });
+                    <div
+                      ref={(el) => {
+                        panelRefs.current[i] = el;
                       }}
-                      className={`${fade} btn-layer-gold btn-shine mt-4 block w-full rounded-full bg-gold py-3 text-center text-[15px] font-semibold text-white hover:-translate-y-0.5 active:scale-[0.98]`}
+                      className="border-t border-line/70 px-5 pb-5 pt-4"
                     >
-                      অর্ডার করুন — {pack}
-                    </button>
+                      <p className="text-center text-[14px] font-semibold text-cocoa">প্যাক বেছে নিন:</p>
+                      <div className="mt-2.5 grid grid-cols-2 gap-2">
+                        {packs.items.map((p) => {
+                          const active = pack === p.size;
+                          return (
+                            <button
+                              key={p.size}
+                              type="button"
+                              onClick={() => setPack(p.size)}
+                              aria-pressed={active}
+                              className={`rounded-[14px] border px-3 py-3 text-center ${fade} active:scale-[0.98] ${
+                                active
+                                  ? "border-gold bg-butter/25"
+                                  : "border-line bg-cream/70 hover:border-gold/60"
+                              }`}
+                            >
+                              <span className="block text-[15px] font-semibold leading-none text-cocoa">
+                                {p.size}
+                              </span>
+                              {p.sale !== null && (
+                                <span className="mt-1.5 block leading-none">
+                                  <span className="font-display text-[16px] font-bold text-gold">
+                                    {bnPrice(p.sale)}
+                                  </span>
+                                  {p.regular !== null && (
+                                    <span className="ml-1.5 text-[12px] text-cocoa-faint line-through">
+                                      {bnPrice(p.regular)}
+                                    </span>
+                                  )}
+                                </span>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setVariant(i);
+                          document
+                            .querySelector("#order")
+                            ?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                        className={`${fade} btn-layer-gold btn-shine mt-4 block w-full rounded-full bg-gold py-3 text-center text-[15px] font-semibold text-white hover:-translate-y-0.5 active:scale-[0.98]`}
+                      >
+                        অর্ডার করুন — {pack}
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </article>
-            );
-          })}
+                </article>
+              );
+            })}
+          </div>
         </div>
       </section>
       {/* ── জিজ্ঞাসা ── */}
