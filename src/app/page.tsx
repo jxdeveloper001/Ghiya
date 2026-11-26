@@ -392,21 +392,18 @@ export default function Home() {
       </section>
 
       {/* ── গুণাগুণ — the user's poster, rebuilt in code: his gold
-           pattern image as the background under a brown veil,
+           pattern image as the background, kept bright as it is and
+           only slightly blurred (no dark veil, no fading),
            "গুণাগুণ" centred on top with a gold underline, 4 benefits
            cascading down the left with hover effects, jar + brass
            bowl on the right. The product cutouts are transparent —
            the white light sits UNDER them, never over the top ── */}
-      <section
-        id="benefits"
-        className="relative scroll-mt-24 overflow-hidden py-[60px]"
-        style={{
-          backgroundImage: "url(/benefits-pattern.jpg)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div aria-hidden className="absolute inset-0 bg-[#3a2405]/50" />
+      <section id="benefits" className="relative scroll-mt-24 overflow-hidden py-[60px]">
+        <div
+          aria-hidden
+          className="absolute inset-0 scale-110 bg-cover bg-center blur-[3px]"
+          style={{ backgroundImage: "url(/benefits-pattern.jpg)" }}
+        />
         <div className="relative mx-auto max-w-6xl px-5 md:px-8">
           <div className="reveal text-center">
             <h2 className="font-display text-[34px] font-bold text-white sm:text-[44px]">
