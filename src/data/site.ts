@@ -120,6 +120,29 @@ export const packs = {
   ],
 } as const;
 
+export const variants = [
+  {
+    name: "হলুদ স্টিকার",
+    img: "/ghee-variant-yellow.jpg",
+    alt: "Gheeya ঘি — হলুদ স্টিকার",
+  },
+  {
+    name: "লাল স্টিকার",
+    img: "/ghee-variant-red.jpg",
+    alt: "Gheeya ঘি — লাল স্টিকার",
+  },
+  {
+    name: "সবুজ স্টিকার",
+    img: "/ghee-variant-green.jpg",
+    alt: "Gheeya ঘি — সবুজ স্টিকার",
+  },
+  {
+    name: "বেগুনি স্টিকার",
+    img: "/ghee-variant-purple.jpg",
+    alt: "Gheeya ঘি — বেগুনি স্টিকার",
+  },
+] as const;
+
 export const faqs = [
   {
     q: "Gheeya ঘি কি সম্পূর্ণ খাঁটি?",
