@@ -333,7 +333,7 @@ export default function Home() {
           priority
           className="object-cover object-[50%_35%]"
         />
-        <div className="relative mx-auto flex max-w-3xl flex-col items-center px-5 pb-[100px] pt-[100px] text-center">
+        <div className="relative mx-auto flex max-w-3xl flex-col items-center px-5 pb-[60px] pt-[60px] text-center">
           <div className="hero-in">
             <p className="text-[15px] font-semibold tracking-wide text-ivory/85">
               {hero.eyebrow}
@@ -349,12 +349,12 @@ export default function Home() {
           </div>
           {/* Jar — no box, no frame: just the picture, feathered into
               the background, a little bigger */}
-          <div className="hero-in-delay animate-float mt-9 w-[360px] sm:w-[520px]">
+          <div className="hero-in-delay animate-float mt-9 w-[360px] sm:w-[600px]">
             <Image
-              src="/ghee-jar.jpg"
+              src="/ghee-jar-tight.jpg"
               alt={hero.jarAlt}
-              width={1200}
-              height={1200}
+              width={1136}
+              height={1136}
               priority
               className="img-feather aspect-square w-full object-cover"
             />
