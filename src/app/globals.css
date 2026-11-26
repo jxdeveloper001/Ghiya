@@ -30,6 +30,13 @@ body {
   overflow-x: clip;
 }
 
+/* Tailwind v4 preflight leaves buttons with the default arrow cursor;
+   every clickable control should show the pointer hand on hover. */
+button,
+[role="button"] {
+  cursor: pointer;
+}
+
 /* Section background textures (user-supplied): cream texture for
    cream sections, yellow texture for yellow sections. The solid
    colour underneath stays as the fallback while the image loads. */

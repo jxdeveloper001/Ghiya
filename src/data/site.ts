@@ -70,27 +70,33 @@ export const benefits = {
   items: [
     {
       no: "০১",
-      icon: "leaf",
-      title: "১০০% প্রাকৃতিক",
-      text: "শুধু খাঁটি ঘি, আর কিছুই নয়।",
+      icon: "gut",
+      title: "পেটের স্বাস্থ্য ভালো রাখে",
+      text: "",
     },
     {
       no: "০২",
-      icon: "shield",
-      title: "কেমিক্যালমুক্ত",
-      text: "কোনো প্রিজারভেটিভ নেই।",
+      icon: "bone",
+      title: "হাড় মজবুত করে",
+      text: "",
     },
     {
       no: "০৩",
-      icon: "drop",
-      title: "এ২ গরুর দুধ",
-      text: "এ২ গির গরুর দুধ থেকে তৈরি।",
+      icon: "stomach",
+      title: "হজম শক্তি বৃদ্ধি করে",
+      text: "",
     },
     {
       no: "০৪",
-      icon: "clock",
-      title: "ধীরে জ্বাল দেওয়া",
-      text: "আস্তে আস্তে জ্বাল দিয়ে সোনালি ঘি।",
+      icon: "vitamin",
+      title: "প্রয়োজনীয় ভিটামিনের উৎস",
+      text: "",
+    },
+    {
+      no: "০৫",
+      icon: "lactose",
+      title: "ল্যাকটোজ অসহিষ্ণুদের জন্য উপকারী",
+      text: "",
     },
   ],
 } as const;
@@ -122,24 +128,24 @@ export const packs = {
 
 export const variants = [
   {
-    name: "হলুদ স্টিকার",
+    name: "শাহি ঘি",
     img: "/ghee-variant-yellow.jpg",
-    alt: "Gheeya ঘি — হলুদ স্টিকার",
+    alt: "Gheeya ঘি — শাহি ঘি",
   },
   {
-    name: "লাল স্টিকার",
+    name: "বিলাস ঘি",
     img: "/ghee-variant-red.jpg",
-    alt: "Gheeya ঘি — লাল স্টিকার",
+    alt: "Gheeya ঘি — বিলাস ঘি",
   },
   {
-    name: "সবুজ স্টিকার",
+    name: "বায়ান ঘি",
     img: "/ghee-variant-green.jpg",
-    alt: "Gheeya ঘি — সবুজ স্টিকার",
+    alt: "Gheeya ঘি — বায়ান ঘি",
   },
   {
-    name: "বেগুনি স্টিকার",
+    name: "রসাই ঘি",
     img: "/ghee-variant-purple.jpg",
-    alt: "Gheeya ঘি — বেগুনি স্টিকার",
+    alt: "Gheeya ঘি — রসাই ঘি",
   },
 ] as const;
 

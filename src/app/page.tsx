@@ -7,33 +7,37 @@ import { benefits, faqs, hero, intro, order, packs, reviews, site, variants, vid
 const fade = "transition-all duration-300 ease-out";
 
 const iconMap: Record<string, React.ReactNode> = {
-  leaf: (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14z" />
-      <path d="M5 19c3-5 7-9 11-11" />
+  gut: (
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 3l7 2.8V11c0 4.6-3 7.8-7 9.2-4-1.4-7-4.6-7-9.2V5.8L12 3z" />
+      <path d="M12 9.2v5.6M9.2 12h5.6" />
     </svg>
   ),
-  shield: (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z" />
-      <path d="M9 12l2 2 4-4" />
+  bone: (
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M7.6 7.6l8.8 8.8" strokeWidth="2.6" />
+      <circle cx="6.2" cy="6.2" r="2.3" />
+      <circle cx="17.8" cy="17.8" r="2.3" />
     </svg>
   ),
-  drop: (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z" />
+  stomach: (
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 3.5h5" />
+      <path d="M10 3.5V6c-2.6.7-4.2 2.5-4.2 5 0 2.2 1.1 3.6 2.6 5 1.2 1.1 2.1 2.2 2.1 4.5" />
+      <path d="M16.8 15.8v4.4M14.6 18h4.4" />
     </svg>
   ),
-  clock: (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="8.5" />
-      <path d="M12 7v5l3.5 2" />
+  vitamin: (
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3.5" y="8.5" width="17" height="7" rx="3.5" />
+      <path d="M12 8.5v7" />
     </svg>
   ),
-  sun: (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="4.5" />
-      <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.5 4.5l2 2M17.5 17.5l2 2M19.5 4.5l-2 2M6.5 17.5l-2 2" />
+  lactose: (
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10.2 3h3.6" />
+      <path d="M11 3v2.6L9 7.8v9.4a1.8 1.8 0 0 0 1.8 1.8h2.4A1.8 1.8 0 0 0 15 17.2V7.8L13 5.6V3" />
+      <path d="M4.5 4.5l15 15" />
     </svg>
   ),
 };
@@ -71,7 +75,7 @@ function VideoSection() {
   };
 
   return (
-    <section id="video" className="scroll-mt-24 bg-cream-img py-[60px]">
+    <section id="video" className="scroll-mt-24 bg-cream-img py-[100px]">
       <div className="mx-auto max-w-3xl px-5 md:px-8">
       <div className="reveal text-center">
         <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
@@ -138,10 +142,7 @@ export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [pack, setPack] = useState("৩০০ গ্রাম");
   const [qty, setQty] = useState(1);
-  const [selectedVariant, setSelectedVariant] = useState<number | null>(null);
   const [variant, setVariant] = useState(0);
-  const panelRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const [panelHeights, setPanelHeights] = useState<number[]>([]);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
@@ -215,10 +216,8 @@ export default function Home() {
   // Measure each FAQ answer once so open/close animates smoothly
   // (max-height) instead of vanishing in one frame.
   useEffect(() => {
-    const measure = () => {
+    const measure = () =>
       setFaqHeights(faqRefs.current.map((el) => el?.scrollHeight ?? 0));
-      setPanelHeights(panelRefs.current.map((el) => el?.scrollHeight ?? 0));
-    };
     measure();
     window.addEventListener("resize", measure);
     document.fonts?.ready.then(measure).catch(() => {});
@@ -334,7 +333,7 @@ export default function Home() {
           priority
           className="object-cover object-[50%_35%]"
         />
-        <div className="relative mx-auto flex max-w-3xl flex-col items-center px-5 pb-[60px] pt-[60px] text-center">
+        <div className="relative mx-auto flex max-w-3xl flex-col items-center px-5 pb-[100px] pt-[100px] text-center">
           <div className="hero-in">
             <p className="text-[15px] font-semibold tracking-wide text-ivory/85">
               {hero.eyebrow}
@@ -350,7 +349,7 @@ export default function Home() {
           </div>
           {/* Jar — no box, no frame: just the picture, feathered into
               the background, a little bigger */}
-          <div className="hero-in-delay animate-float mt-9 w-[320px] sm:w-[440px]">
+          <div className="hero-in-delay animate-float mt-9 w-[360px] sm:w-[520px]">
             <Image
               src="/ghee-jar.jpg"
               alt={hero.jarAlt}
@@ -374,77 +373,78 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── গুণাগুণ — reference style: jar in the middle,
-           2 features each side; background = the open-jar photo,
-           heavily blurred inside the cream colour ── */}
-      <section id="benefits" className="relative scroll-mt-24 overflow-hidden py-[60px]">
-        <div aria-hidden className="absolute inset-0">
-          <Image
-            src="/benefits-bg.jpg"
-            alt=""
-            fill
-            className="scale-125 object-cover blur-3xl"
-          />
-          <div className="absolute inset-0 bg-cream/55" />
-        </div>
+      {/* ── গুণাগুণ — the user's poster, rebuilt in code (not the
+           image itself): warm brown gradient, "গুণাগুণ" centred on
+           top with a gold underline, 5 benefits cascading down the
+           left, jar + brass bowl of ghee on the right ── */}
+      <section
+        id="benefits"
+        className="relative scroll-mt-24 overflow-hidden py-[100px]"
+        style={{
+          background:
+            "radial-gradient(ellipse 90% 70% at 50% 32%, #a38762 0%, #81633d 58%, #6b5233 100%)",
+        }}
+      >
         <div className="relative mx-auto max-w-6xl px-5 md:px-8">
           <div className="reveal text-center">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
-              {benefits.eyebrow}
-            </p>
-            <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
-              {benefits.heading}
+            <h2 className="font-display text-[34px] font-bold text-white sm:text-[44px]">
+              গুণাগুণ
             </h2>
-            <p className="mx-auto mt-3 max-w-lg text-[16.5px] leading-relaxed text-cocoa-soft">
-              {benefits.subtext}
-            </p>
+            <div className="mx-auto mt-3 h-[3px] w-[110px] bg-[#d9a441]" />
           </div>
-          <div className="reveal mx-auto mt-10 grid max-w-5xl items-center gap-10 md:mt-12 md:grid-cols-[1fr_240px_1fr] md:gap-8">
-            <div className="order-2 space-y-8 md:order-1">
-              {benefits.items.slice(0, 2).map((b) => (
-                <div key={b.title} className="text-center md:text-right">
-                  <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-gold/12 text-gold md:ml-auto md:mr-0">
-                    {iconMap[b.icon]}
-                  </span>
-                  <h3 className="mt-3 font-display text-[19px] font-bold leading-snug text-cocoa">
-                    {b.title}
-                  </h3>
-                  <p className="mt-1 text-[14.5px] leading-relaxed text-cocoa-soft">
-                    {b.text}
-                  </p>
-                </div>
-              ))}
+          <div className="mt-12 grid items-center gap-12 md:mt-14 md:grid-cols-[1.05fr_0.95fr] md:gap-8">
+            <div className="order-2 space-y-7 md:order-1">
+              {benefits.items.map((b, idx) => {
+                const off = [
+                  "md:ml-auto md:mr-0",
+                  "md:ml-[48%]",
+                  "md:ml-[30%]",
+                  "md:ml-[18%]",
+                  "md:ml-[34%]",
+                ][idx];
+                return (
+                  <div
+                    key={b.title}
+                    className={`mx-auto flex w-[210px] flex-col items-center text-center ${off}`}
+                  >
+                    <span className="rounded-full border-2 border-dashed border-[#e3cfa3]/80 p-[6px]">
+                      <span className="flex h-[72px] w-[72px] items-center justify-center rounded-full bg-[#3b2716] text-[#f5e9cf]">
+                        {iconMap[b.icon]}
+                      </span>
+                    </span>
+                    <p className="mt-3 text-[15.5px] font-medium leading-snug text-white">
+                      {b.title}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
-            <div className="animate-float order-1 mx-auto w-[210px] md:order-2 md:w-[240px]">
-              <Image
-                src="/ghee-jar.jpg"
-                alt="Gheeya ঘি — জার"
-                width={1200}
-                height={1200}
-                className="img-feather aspect-square w-full object-contain"
+            <div className="relative order-1 mx-auto w-[300px] sm:w-[380px] md:order-2">
+              <div
+                aria-hidden
+                className="absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#5c4026]/70 blur-2xl"
               />
-            </div>
-            <div className="order-3 space-y-8">
-              {benefits.items.slice(2, 4).map((b) => (
-                <div key={b.title} className="text-center md:text-left">
-                  <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-gold/12 text-gold md:mr-auto md:ml-0">
-                    {iconMap[b.icon]}
-                  </span>
-                  <h3 className="mt-3 font-display text-[19px] font-bold leading-snug text-cocoa">
-                    {b.title}
-                  </h3>
-                  <p className="mt-1 text-[14.5px] leading-relaxed text-cocoa-soft">
-                    {b.text}
-                  </p>
-                </div>
-              ))}
+              <Image
+                src="/ghee-jar-tight.jpg"
+                alt="Gheeya ঘি — জার"
+                width={1136}
+                height={1136}
+                className="img-feather relative aspect-square w-full object-cover"
+              />
+              <Image
+                src="/ghee-bowl.jpg"
+                alt="পিতলের বাটিতে Gheeya ঘি"
+                width={1024}
+                height={1024}
+                className="img-feather absolute -bottom-4 -right-2 w-[130px] sm:w-[150px]"
+              />
             </div>
           </div>
         </div>
       </section>
       {/* ── পরিচিতি — dark yellow band ── */}
       <section id="intro" className="relative overflow-hidden bg-gold bg-yellow-img">
-        <div className="relative mx-auto grid max-w-6xl gap-8 px-5 py-[60px] md:grid-cols-[1.1fr_0.9fr] md:px-8">
+        <div className="relative mx-auto grid max-w-6xl gap-8 px-5 py-[100px] md:grid-cols-[1.1fr_0.9fr] md:px-8">
           <div className="reveal">
             <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-ivory/90">
               {intro.eyebrow}
@@ -469,143 +469,73 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Gheeya product — cloned from the reference: pale blush
-           section, white cards, product centred, name / price /
-           stars centred, click a card to expand size + price ── */}
-      <section id="products" className="scroll-mt-24 bg-[#f9f4f0] py-[60px]">
+      {/* ── ঘিয়া পণ্য — 4 variants with Bengali names; the card's
+           "অর্ডার করুন" button selects the variant and goes to the
+           order section (no size panel on click) ── */}
+      <section id="products" className="scroll-mt-24 bg-[#f9f4f0] py-[100px]">
         <div className="mx-auto max-w-6xl px-5 md:px-8">
           <div className="reveal text-center">
             <h2 className="font-display text-[30px] font-bold text-cocoa sm:text-[38px]">
-              Gheeya product
+              ঘিয়া পণ্য
             </h2>
             <p className="mx-auto mt-3 max-w-md text-[16px] leading-relaxed text-cocoa-soft">
               স্বাদ একই — শুধু স্টিকারের রং আলাদা।
             </p>
           </div>
           <div className="mt-10 grid grid-cols-1 items-start gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {variants.map((v, i) => {
-              const open = selectedVariant === i;
-              return (
-                <article
-                  key={v.name}
-                  className={`reveal overflow-hidden rounded-[16px] bg-white ${fade} ${
-                    open
-                      ? "border border-gold/60 shadow-[0_18px_36px_-20px_rgb(138_94_0/0.5)]"
-                      : "border border-transparent shadow-[0_10px_28px_-20px_rgb(58_36_5/0.35)]"
-                  }`}
-                >
+            {variants.map((v, i) => (
+              <article
+                key={v.name}
+                className={`reveal overflow-hidden rounded-[16px] border border-transparent bg-white ${fade} shadow-[0_10px_28px_-20px_rgb(58_36_5/0.35)]`}
+              >
+                <span className="block p-4 pb-0">
+                  <Image
+                    src={v.img}
+                    alt={v.alt}
+                    width={1200}
+                    height={1200}
+                    className="aspect-square w-full rounded-[12px] object-cover"
+                  />
+                </span>
+                <span className="block px-5 pb-5 pt-4 text-center">
+                  <span className="block font-display text-[19px] font-bold leading-snug text-cocoa">
+                    {v.name}
+                  </span>
+                  <span className="mt-1.5 block leading-none">
+                    {fromPrice !== null && (
+                      <span className="font-display text-[16px] font-bold text-gold-deep">
+                        {bnPrice(fromPrice)}
+                      </span>
+                    )}
+                    {packs.items[0].regular !== null && (
+                      <span className="ml-2 text-[13px] text-cocoa-faint line-through">
+                        {bnPrice(packs.items[0].regular)}
+                      </span>
+                    )}
+                  </span>
+                  <span className="mt-1.5 block text-[13px] leading-none tracking-[0.2em] text-gold">
+                    ★★★★★
+                  </span>
                   <button
                     type="button"
-                    onClick={() => setSelectedVariant(open ? null : i)}
-                    aria-expanded={open}
-                    className="block w-full text-center"
+                    onClick={() => {
+                      setVariant(i);
+                      document
+                        .querySelector("#order")
+                        ?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    className={`${fade} btn-layer-gold btn-shine mt-4 block w-full rounded-full bg-gold py-3 text-center text-[15px] font-semibold text-white hover:-translate-y-0.5 active:scale-[0.98]`}
                   >
-                    <span className="block p-4 pb-0">
-                      <Image
-                        src={v.img}
-                        alt={v.alt}
-                        width={1200}
-                        height={1200}
-                        className="aspect-square w-full rounded-[12px] object-cover"
-                      />
-                    </span>
-                    <span className="block px-5 pb-5 pt-4">
-                      <span className="block font-display text-[19px] font-bold leading-snug text-cocoa">
-                        {v.name}
-                      </span>
-                      <span className="mt-1.5 block leading-none">
-                        {fromPrice !== null && (
-                          <span className="font-display text-[16px] font-bold text-gold-deep">
-                            {bnPrice(fromPrice)}
-                          </span>
-                        )}
-                        {packs.items[0].regular !== null && (
-                          <span className="ml-2 text-[13px] text-cocoa-faint line-through">
-                            {bnPrice(packs.items[0].regular)}
-                          </span>
-                        )}
-                      </span>
-                      <span className="mt-1.5 block text-[13px] leading-none tracking-[0.2em] text-gold">
-                        ★★★★★
-                      </span>
-                      <span
-                        className={`mx-auto mt-3.5 flex h-9 w-9 items-center justify-center rounded-full border text-[18px] leading-none transition-all duration-300 ${
-                          open
-                            ? "rotate-45 border-gold bg-gold text-white"
-                            : "border-line text-cocoa-soft"
-                        }`}
-                      >
-                        +
-                      </span>
-                    </span>
+                    অর্ডার করুন
                   </button>
-                  <div
-                    style={{ maxHeight: open ? `${panelHeights[i] ?? 0}px` : "0px" }}
-                    className="overflow-hidden transition-[max-height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
-                  >
-                    <div
-                      ref={(el) => {
-                        panelRefs.current[i] = el;
-                      }}
-                      className="border-t border-line/70 px-5 pb-5 pt-4"
-                    >
-                      <p className="text-center text-[14px] font-semibold text-cocoa">প্যাক বেছে নিন:</p>
-                      <div className="mt-2.5 grid grid-cols-2 gap-2">
-                        {packs.items.map((p) => {
-                          const active = pack === p.size;
-                          return (
-                            <button
-                              key={p.size}
-                              type="button"
-                              onClick={() => setPack(p.size)}
-                              aria-pressed={active}
-                              className={`rounded-[14px] border px-3 py-3 text-center ${fade} active:scale-[0.98] ${
-                                active
-                                  ? "border-gold bg-butter/25"
-                                  : "border-line bg-cream/70 hover:border-gold/60"
-                              }`}
-                            >
-                              <span className="block text-[15px] font-semibold leading-none text-cocoa">
-                                {p.size}
-                              </span>
-                              {p.sale !== null && (
-                                <span className="mt-1.5 block leading-none">
-                                  <span className="font-display text-[16px] font-bold text-gold">
-                                    {bnPrice(p.sale)}
-                                  </span>
-                                  {p.regular !== null && (
-                                    <span className="ml-1.5 text-[12px] text-cocoa-faint line-through">
-                                      {bnPrice(p.regular)}
-                                    </span>
-                                  )}
-                                </span>
-                              )}
-                            </button>
-                          );
-                        })}
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setVariant(i);
-                          document
-                            .querySelector("#order")
-                            ?.scrollIntoView({ behavior: "smooth" });
-                        }}
-                        className={`${fade} btn-layer-gold btn-shine mt-4 block w-full rounded-full bg-gold py-3 text-center text-[15px] font-semibold text-white hover:-translate-y-0.5 active:scale-[0.98]`}
-                      >
-                        অর্ডার করুন — {pack}
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
+                </span>
+              </article>
+            ))}
           </div>
         </div>
       </section>
       {/* ── জিজ্ঞাসা ── */}
-      <section id="faq" className="scroll-mt-24 bg-cream-img py-[60px]">
+      <section id="faq" className="scroll-mt-24 bg-cream-img py-[100px]">
         <div className="mx-auto max-w-3xl px-5 md:px-8">
         <div className="reveal text-center">
           <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
@@ -665,7 +595,7 @@ export default function Home() {
 
 
       {/* ── রিভিউ — auto right-to-left infinite slider + prev/next buttons ── */}
-      <section id="reviews" className="scroll-mt-24 bg-cream-deep/60 py-[60px]">
+      <section id="reviews" className="scroll-mt-24 bg-cream-deep/60 py-[100px]">
         <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="reveal flex flex-wrap items-end justify-between gap-5">
           <div className="text-center md:text-left">
@@ -746,7 +676,7 @@ export default function Home() {
 
       {/* ── Order — with the product being bought ── */}
       <section id="order" className="relative scroll-mt-24 overflow-hidden bg-gold bg-yellow-img">
-        <div className="relative mx-auto max-w-2xl px-5 py-[60px] md:px-8">
+        <div className="relative mx-auto max-w-2xl px-5 py-[100px] md:px-8">
           <div className="reveal text-center">
             <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-ivory/90">
               {order.eyebrow}
@@ -829,7 +759,7 @@ export default function Home() {
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="যেমন: রহিম উদ্দিন"
+                    placeholder="নাম"
                     className="w-full rounded-[14px] border border-line bg-white px-4 py-3 text-[16px] text-cocoa outline-none transition-all placeholder:text-cocoa-faint/70 focus:border-gold focus:ring-4 focus:ring-gold/15"
                   />
                 </div>
