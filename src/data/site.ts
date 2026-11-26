@@ -92,12 +92,6 @@ export const benefits = {
       title: "প্রয়োজনীয় ভিটামিনের উৎস",
       text: "",
     },
-    {
-      no: "০৫",
-      icon: "lactose",
-      title: "ল্যাকটোজ অসহিষ্ণুদের জন্য উপকারী",
-      text: "",
-    },
   ],
 } as const;
 

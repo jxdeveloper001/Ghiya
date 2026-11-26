@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { benefits, faqs, hero, intro, order, packs, reviews, site, variants, videoSection } from "@/data/site";
+import { benefits, faqs, hero, order, packs, reviews, site, variants, videoSection } from "@/data/site";
 
 const fade = "transition-all duration-300 ease-out";
 
@@ -149,6 +149,7 @@ export default function Home() {
   const [done, setDone] = useState(false);
   const [orderId, setOrderId] = useState("");
   const faqRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const resetTimer = useRef<number | null>(null);
   const [faqHeights, setFaqHeights] = useState<number[]>([]);
 
   // ── Reviews slider: auto-advances right-to-left (track moves left),
@@ -256,12 +257,29 @@ export default function Home() {
     return () => io.disconnect();
   }, []);
 
+  // Clear the auto-reset timer if the page goes away mid-countdown.
+  useEffect(() => {
+    return () => {
+      if (resetTimer.current) window.clearTimeout(resetTimer.current);
+    };
+  }, []);
+
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!name.trim() || !phone.trim() || !address.trim()) return;
     setOrderId(`GHEEYA-${Math.floor(1000 + Math.random() * 9000)}`);
     setDone(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // No scroll — the thanks panel replaces the form in place, so the
+    // user stays exactly where they are. After 5 seconds the panel
+    // goes away and the form comes back, ready for the next order.
+    if (resetTimer.current) window.clearTimeout(resetTimer.current);
+    resetTimer.current = window.setTimeout(() => {
+      setDone(false);
+      setName("");
+      setPhone("");
+      setAddress("");
+      setQty(1);
+    }, 5000);
   }
 
   return (
@@ -277,7 +295,6 @@ export default function Home() {
           </a>
           <nav className="hidden items-center gap-8 text-[15px] font-medium text-cocoa-soft md:flex">
             <a href="#benefits" className={`${fade} hover:text-gold`}>গুণাগুণ</a>
-            <a href="#intro" className={`${fade} hover:text-gold`}>পরিচিতি</a>
             <a href="#products" className={`${fade} hover:text-gold`}>পণ্য</a>
             <a href="#faq" className={`${fade} hover:text-gold`}>জিজ্ঞাসা</a>
           </nav>
@@ -304,7 +321,6 @@ export default function Home() {
             <nav className="flex flex-col px-5 py-2 text-[16px] font-medium text-cocoa-soft">
               {[
                 ["#benefits", "গুণাগুণ"],
-                ["#intro", "পরিচিতি"],
                 ["#products", "পণ্য"],
                 ["#faq", "জিজ্ঞাসা"],
               ].map(([href, label]) => (
@@ -349,7 +365,7 @@ export default function Home() {
           </div>
           {/* Jar — no box, no frame: just the picture, feathered into
               the background, a little bigger */}
-          <div className="hero-in-delay animate-float mt-9 w-[360px] sm:w-[600px]">
+          <div className="hero-in-delay animate-float mt-9 w-[340px] sm:w-[520px]">
             <Image
               src="/ghee-jar-tight.jpg"
               alt={hero.jarAlt}
@@ -373,18 +389,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── গুণাগুণ — the user's poster, rebuilt in code (not the
-           image itself): warm brown gradient, "গুণাগুণ" centred on
-           top with a gold underline, 5 benefits cascading down the
-           left, jar + brass bowl of ghee on the right ── */}
+      {/* ── গুণাগুণ — the user's poster, rebuilt in code: his gold
+           pattern image as the background under a brown veil,
+           "গুণাগুণ" centred on top with a gold underline, 4 benefits
+           cascading down the left with hover effects, jar + brass
+           bowl on the right. The product cutouts are transparent —
+           the white light sits UNDER them, never over the top ── */}
       <section
         id="benefits"
-        className="relative scroll-mt-24 overflow-hidden py-[100px]"
+        className="relative scroll-mt-24 overflow-hidden py-[60px]"
         style={{
-          background:
-            "radial-gradient(ellipse 90% 70% at 50% 32%, #a38762 0%, #81633d 58%, #6b5233 100%)",
+          backgroundImage: "url(/benefits-pattern.jpg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
+        <div aria-hidden className="absolute inset-0 bg-[#3a2405]/50" />
         <div className="relative mx-auto max-w-6xl px-5 md:px-8">
           <div className="reveal text-center">
             <h2 className="font-display text-[34px] font-bold text-white sm:text-[44px]">
@@ -392,27 +412,26 @@ export default function Home() {
             </h2>
             <div className="mx-auto mt-3 h-[3px] w-[110px] bg-[#d9a441]" />
           </div>
-          <div className="mt-12 grid items-center gap-12 md:mt-14 md:grid-cols-[1.05fr_0.95fr] md:gap-8">
-            <div className="order-2 space-y-7 md:order-1">
+          <div className="mt-10 grid items-center gap-10 md:grid-cols-[1.05fr_0.95fr] md:gap-8">
+            <div className="order-2 space-y-5 md:order-1">
               {benefits.items.map((b, idx) => {
                 const off = [
                   "md:ml-auto md:mr-0",
                   "md:ml-[48%]",
                   "md:ml-[30%]",
                   "md:ml-[18%]",
-                  "md:ml-[34%]",
                 ][idx];
                 return (
                   <div
                     key={b.title}
-                    className={`mx-auto flex w-[210px] flex-col items-center text-center ${off}`}
+                    className={`group mx-auto flex w-[210px] flex-col items-center text-center transition-transform duration-300 hover:-translate-y-1 ${off}`}
                   >
-                    <span className="rounded-full border-2 border-dashed border-[#e3cfa3]/80 p-[6px]">
-                      <span className="flex h-[72px] w-[72px] items-center justify-center rounded-full bg-[#3b2716] text-[#f5e9cf]">
+                    <span className="rounded-full border-2 border-dashed border-[#e3cfa3]/80 p-[6px] transition-all duration-300 group-hover:border-[#f5e9cf] group-hover:shadow-[0_0_28px_rgba(245,233,207,0.35)]">
+                      <span className="flex h-[72px] w-[72px] items-center justify-center rounded-full bg-[#3b2716] text-[#f5e9cf] transition-transform duration-300 group-hover:scale-110">
                         {iconMap[b.icon]}
                       </span>
                     </span>
-                    <p className="mt-3 text-[15.5px] font-medium leading-snug text-white">
+                    <p className="mt-3 text-[15.5px] font-medium leading-snug text-white transition-colors duration-300 group-hover:text-[#ffe9a8]">
                       {b.title}
                     </p>
                   </div>
@@ -422,53 +441,26 @@ export default function Home() {
             <div className="relative order-1 mx-auto w-[300px] sm:w-[380px] md:order-2">
               <div
                 aria-hidden
-                className="absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#5c4026]/70 blur-2xl"
+                className="absolute -bottom-6 left-1/2 h-[120px] w-[340px] -translate-x-1/2 rounded-[100%] bg-white/35 blur-2xl"
               />
               <Image
-                src="/ghee-jar-tight.jpg"
+                src="/ghee-jar-tight.webp"
                 alt="Gheeya ঘি — জার"
                 width={1136}
                 height={1136}
-                className="img-feather relative aspect-square w-full object-cover"
+                className="relative aspect-square w-full object-cover"
               />
               <Image
-                src="/ghee-bowl.jpg"
+                src="/ghee-bowl.webp"
                 alt="পিতলের বাটিতে Gheeya ঘি"
-                width={1024}
-                height={1024}
-                className="img-feather absolute -bottom-4 -right-2 w-[130px] sm:w-[150px]"
+                width={986}
+                height={826}
+                className="absolute -bottom-4 -right-2 w-[160px] sm:w-[190px]"
               />
             </div>
           </div>
         </div>
       </section>
-      {/* ── পরিচিতি — dark yellow band ── */}
-      <section id="intro" className="relative overflow-hidden bg-gold bg-yellow-img">
-        <div className="relative mx-auto grid max-w-6xl gap-8 px-5 py-[100px] md:grid-cols-[1.1fr_0.9fr] md:px-8">
-          <div className="reveal">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-ivory/90">
-              {intro.eyebrow}
-            </p>
-            <h2 className="mt-3 font-display text-[30px] font-semibold text-cocoa sm:text-[38px]">
-              {intro.heading}
-            </h2>
-            <p className="mt-4 max-w-xl text-[16.5px] leading-relaxed text-cocoa">
-              {intro.text}
-            </p>
-          </div>
-          <div className="reveal flex flex-wrap content-start gap-2.5">
-            {intro.points.map((p) => (
-              <span
-                key={p}
-                className={`${fade} cursor-default rounded-full border border-ivory/50 bg-ivory/90 px-4 py-2 text-[14.5px] font-medium text-cocoa hover:-translate-y-0.5 hover:border-ivory`}
-              >
-                {p}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── ঘিয়া পণ্য — 4 variants with Bengali names; the card's
            "অর্ডার করুন" button selects the variant and goes to the
            order section (no size panel on click) ── */}
@@ -917,14 +909,13 @@ export default function Home() {
             </div>
             <nav className="flex flex-wrap gap-x-6 gap-y-2 text-[15px] text-ivory/80">
               <a href="#benefits" className={`${fade} hover:text-butter`}>গুণাগুণ</a>
-              <a href="#intro" className={`${fade} hover:text-butter`}>পরিচিতি</a>
               <a href="#faq" className={`${fade} hover:text-butter`}>জিজ্ঞাসা</a>
               <a href="#order" className={`${fade} hover:text-butter`}>অর্ডার করুন</a>
             </nav>
           </div>
           <div className="mt-10 border-t border-ivory/15 pt-6 text-center text-[13.5px] text-ivory/60">
             <p>{site.contactNote}</p>
-            <p className="mt-2">© ২০২৬ Gheeya · সর্বস্বত্ব সংরক্ষিত</p>
+            <p className="mt-2">© ২০২৬ Gheeya · সর্বস্বত্ব সংরক্ষিত · Developed by{" "}<a href="https://jnx-dev.vercel.app/" target="_blank" rel="noopener noreferrer" className="font-semibold text-butter hover:text-ivory">JNX</a></p>
           </div>
         </div>
       </footer>
